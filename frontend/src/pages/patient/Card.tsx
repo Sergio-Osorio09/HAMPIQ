@@ -1,5 +1,5 @@
 import { s } from '@/lib/style'
-import { VITALS } from '@/services/seed'
+import { useStore } from '@/store/useStore'
 
 const QR_PATTERN = [
   1, 1, 1, 0, 1, 1, 1,
@@ -12,8 +12,9 @@ const QR_PATTERN = [
 ]
 
 export function Card() {
-  const alergiasStr = VITALS.alergias.join(', ')
-  const enfermedadesStr = VITALS.enfermedades.join(', ')
+  const { vitals } = useStore()
+  const alergiasStr = vitals.alergias.join(', ')
+  const enfermedadesStr = vitals.enfermedades.join(', ')
 
   return (
     <div style={s('animation:hq-fade .35s ease both;max-width:760px;')}>
@@ -35,10 +36,10 @@ export function Card() {
         <div style={s('background:#fff;border:1px solid #eaeeed;border-radius:18px;padding:24px;box-shadow:0 1px 2px rgba(15,33,31,.03);')}>
           <div style={s('font-size:12px;font-weight:700;letter-spacing:.06em;color:#c0202f;margin-bottom:18px;')}>INFORMACIÓN QUE VERÁ EL PERSONAL DE EMERGENCIA</div>
           <div style={s('display:flex;flex-direction:column;gap:16px;')}>
-            <div style={s('display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid #f0f3f2;')}><span style={s('font-size:14px;color:#516160;')}>🩸 Grupo sanguíneo</span><span style={s('font-size:16px;font-weight:800;color:#c0202f;')}>{VITALS.sangre}</span></div>
+            <div style={s('display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid #f0f3f2;')}><span style={s('font-size:14px;color:#516160;')}>🩸 Grupo sanguíneo</span><span style={s('font-size:16px;font-weight:800;color:#c0202f;')}>{vitals.sangre}</span></div>
             <div style={s('display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:14px;border-bottom:1px solid #f0f3f2;')}><span style={s('font-size:14px;color:#516160;')}>⚠️ Alergias</span><span style={s('font-size:14px;font-weight:700;text-align:right;')}>{alergiasStr}</span></div>
             <div style={s('display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:14px;border-bottom:1px solid #f0f3f2;')}><span style={s('font-size:14px;color:#516160;')}>🫁 Enfermedades críticas</span><span style={s('font-size:14px;font-weight:700;text-align:right;')}>{enfermedadesStr}</span></div>
-            <div style={s('display:flex;justify-content:space-between;align-items:flex-start;gap:16px;')}><span style={s('font-size:14px;color:#516160;')}>📞 Contacto de emergencia</span><span style={s('font-size:14px;font-weight:700;text-align:right;')}>{VITALS.contacto.nombre}<br /><span style={s('font-size:12.5px;color:#8a9a98;font-weight:500;')}>{VITALS.contacto.telefono}</span></span></div>
+            <div style={s('display:flex;justify-content:space-between;align-items:flex-start;gap:16px;')}><span style={s('font-size:14px;color:#516160;')}>📞 Contacto de emergencia</span><span style={s('font-size:14px;font-weight:700;text-align:right;')}>{vitals.contacto.nombre}<br /><span style={s('font-size:12.5px;color:#8a9a98;font-weight:500;')}>{vitals.contacto.telefono}</span></span></div>
           </div>
         </div>
       </div>

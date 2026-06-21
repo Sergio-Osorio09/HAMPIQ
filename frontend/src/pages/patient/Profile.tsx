@@ -1,15 +1,14 @@
 import { Toggle } from '@/components/Toggle'
 import { s } from '@/lib/style'
 import { useStore } from '@/store/useStore'
-import { VITALS } from '@/services/seed'
 
 const PFIELD = 'width:100%;border:1.5px solid #e6eeed;border-radius:10px;padding:12px 14px;font-size:14px;background:#fbfcfc;'
 const PRIV = 'display:flex;align-items:center;gap:10px;border:1px solid #eaeeed;background:#fbfcfc;border-radius:11px;padding:13px 15px;cursor:pointer;font-size:13.5px;font-weight:600;color:#0f211f;'
 
 export function Profile() {
-  const { profile, pgo, toggleProfile } = useStore()
-  const alergiasStr = VITALS.alergias.join(', ')
-  const enfermedadesStr = VITALS.enfermedades.join(', ')
+  const { profile, vitals, pgo, toggleProfile } = useStore()
+  const alergiasStr = vitals.alergias.join(', ')
+  const enfermedadesStr = vitals.enfermedades.join(', ')
 
   return (
     <div style={s('animation:hq-fade .35s ease both;max-width:820px;')}>
@@ -32,10 +31,10 @@ export function Profile() {
         <div style={s('background:#fff;border:1px solid #eaeeed;border-radius:18px;padding:22px;box-shadow:0 1px 2px rgba(15,33,31,.03);')}>
           <div style={s('font-size:12.5px;font-weight:700;letter-spacing:.04em;color:#0f211f;margin-bottom:16px;')}>🩺 DATOS MÉDICOS BASE</div>
           <div style={s('display:flex;flex-direction:column;gap:13px;')}>
-            <div style={s('display:flex;justify-content:space-between;')}><span style={s('font-size:13.5px;color:#516160;')}>Grupo sanguíneo</span><span style={s('font-size:13.5px;font-weight:700;color:#c0202f;')}>{VITALS.sangre}</span></div>
+            <div style={s('display:flex;justify-content:space-between;')}><span style={s('font-size:13.5px;color:#516160;')}>Grupo sanguíneo</span><span style={s('font-size:13.5px;font-weight:700;color:#c0202f;')}>{vitals.sangre}</span></div>
             <div style={s('display:flex;justify-content:space-between;gap:12px;')}><span style={s('font-size:13.5px;color:#516160;')}>Alergias</span><span style={s('font-size:13.5px;font-weight:600;text-align:right;')}>{alergiasStr}</span></div>
             <div style={s('display:flex;justify-content:space-between;gap:12px;')}><span style={s('font-size:13.5px;color:#516160;')}>Enfermedades</span><span style={s('font-size:13.5px;font-weight:600;text-align:right;')}>{enfermedadesStr}</span></div>
-            <div style={s('display:flex;justify-content:space-between;gap:12px;')}><span style={s('font-size:13.5px;color:#516160;')}>Contacto emergencia</span><span style={s('font-size:13.5px;font-weight:600;text-align:right;')}>{VITALS.contacto.nombre}</span></div>
+            <div style={s('display:flex;justify-content:space-between;gap:12px;')}><span style={s('font-size:13.5px;color:#516160;')}>Contacto emergencia</span><span style={s('font-size:13.5px;font-weight:600;text-align:right;')}>{vitals.contacto.nombre}</span></div>
           </div>
         </div>
         <div style={s('background:#fff;border:1px solid #eaeeed;border-radius:18px;padding:22px;box-shadow:0 1px 2px rgba(15,33,31,.03);')}>

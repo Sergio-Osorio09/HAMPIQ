@@ -3,17 +3,16 @@ import { s } from '@/lib/style'
 import { fmtDate, fmtRemaining } from '@/lib/format'
 import { useStore } from '@/store/useStore'
 import { computeHistoryView } from '@/store/selectors'
-import { HISTORY, VITALS } from '@/services/seed'
 
 export function DoctorAccess() {
-  const { doc, now, extraHistory, pendingStudies, openEvent, openMedModal, validarTokenMedico, cerrarAccesoMedico, setDoc } = useStore()
+  const { doc, now, history, vitals, pendingStudies, openEvent, openMedModal, validarTokenMedico, cerrarAccesoMedico, setDoc } = useStore()
   const docGrantRemMs = doc.grantExpires ? Math.max(0, doc.grantExpires - now) : 0
   const docExpiredNow = doc.granted && docGrantRemMs <= 0
   const docGranted = doc.granted && !docExpiredNow
   const docGrantRem = fmtRemaining(docGrantRemMs)
-  const alergiasStr = VITALS.alergias.join(', ')
-  const enfermedadesStr = VITALS.enfermedades.join(', ')
-  const historyView = computeHistoryView(extraHistory, HISTORY)
+  const alergiasStr = vitals.alergias.join(', ')
+  const enfermedadesStr = vitals.enfermedades.join(', ')
+  const historyView = computeHistoryView(history)
   const pendingView = pendingStudies.map((p) => ({ ...p, fecha: fmtDate(p.ts), icon: p.tipo === 'Imagen' ? '🖼️' : '🧪' }))
 
   return (
@@ -25,7 +24,7 @@ export function DoctorAccess() {
             <div style={s('text-align:right;')}><div style={s('font-size:11px;color:#5a7a76;font-weight:600;')}>EXPIRA EN</div><div style={s("font-size:20px;font-weight:800;color:#0a5c55;font-family:'JetBrains Mono',monospace;")}>{docGrantRem}</div></div>
           </div>
           <div style={s('display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;')}>
-            <div style={s('display:flex;align-items:center;gap:14px;')}><div style={s('width:48px;height:48px;border-radius:50%;background:linear-gradient(150deg,#0d7d74,#0a5c55);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;')}>JP</div><div><div style={s('font-size:20px;font-weight:800;')}>Juan Carlos Pérez Quispe</div><div style={s('font-size:13px;color:#8a9a98;')}>DNI 45872136 · 35 años · Grupo {VITALS.sangre}</div></div></div>
+            <div style={s('display:flex;align-items:center;gap:14px;')}><div style={s('width:48px;height:48px;border-radius:50%;background:linear-gradient(150deg,#0d7d74,#0a5c55);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;')}>JP</div><div><div style={s('font-size:20px;font-weight:800;')}>Juan Carlos Pérez Quispe</div><div style={s('font-size:13px;color:#8a9a98;')}>DNI 45872136 · 35 años · Grupo {vitals.sangre}</div></div></div>
             <button onClick={cerrarAccesoMedico} style={s('border:1px solid #d4e0de;background:#fff;color:#516160;font-size:13px;font-weight:600;padding:10px 16px;border-radius:9px;cursor:pointer;')}>Cerrar acceso</button>
           </div>
           <div style={s('display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;')}>

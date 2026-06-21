@@ -6,7 +6,7 @@ import { PATIENTS } from '@/services/seed'
 const STAT = 'background:#fff;border:1px solid #eaeeed;border-radius:16px;padding:20px;'
 
 export function DoctorHome() {
-  const { audit, recetas, extraHistory, pgo } = useStore()
+  const { audit, recetas, history, pgo } = useStore()
   const medConsultas = computeMedConsultas(audit)
   const medStats = { total: medConsultas.length }
 
@@ -24,7 +24,7 @@ export function DoctorHome() {
         <div style={s(STAT)}><div style={s('font-size:12.5px;color:#516160;margin-bottom:8px;')}>Consultas realizadas</div><div style={s('font-size:30px;font-weight:800;color:#1d4ed8;')}>{medStats.total}</div></div>
         <div style={s(STAT)}><div style={s('font-size:12.5px;color:#516160;margin-bottom:8px;')}>Pacientes</div><div style={s('font-size:30px;font-weight:800;')}>3</div></div>
         <div style={s(STAT)}><div style={s('font-size:12.5px;color:#516160;margin-bottom:8px;')}>Recetas emitidas</div><div style={s('font-size:30px;font-weight:800;color:#0d7d74;')}>{recetas.length}</div></div>
-        <div style={s(STAT)}><div style={s('font-size:12.5px;color:#516160;margin-bottom:8px;')}>Notas agregadas</div><div style={s('font-size:30px;font-weight:800;')}>{extraHistory.length}</div></div>
+        <div style={s(STAT)}><div style={s('font-size:12.5px;color:#516160;margin-bottom:8px;')}>Notas agregadas</div><div style={s('font-size:30px;font-weight:800;')}>{history.filter((e) => e.nuevo).length}</div></div>
       </div>
       <div style={s('display:grid;grid-template-columns:1.3fr 1fr;gap:16px;')}>
         <div style={s('background:#0f211f;border-radius:18px;padding:24px;color:#fff;position:relative;overflow:hidden;')}>

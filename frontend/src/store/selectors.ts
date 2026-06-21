@@ -83,8 +83,8 @@ export function computeAuditView(audit: AuditEntry[]) {
 }
 
 // ---------- history ----------
-export function computeHistoryView(extra: ClinicalEvent[], history: ClinicalEvent[]) {
-  return [...extra, ...history].map((e) => {
+export function computeHistoryView(events: ClinicalEvent[]) {
+  return events.map((e) => {
     const tc = TIPO_C[e.tipo] || fallback
     const sc = SEV_C[e.sev] || fallback
     return {

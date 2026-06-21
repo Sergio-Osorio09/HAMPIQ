@@ -9,6 +9,7 @@ import { Toast } from '@/components/Toast'
 export default function App() {
   const screen = useStore((st) => st.screen)
   const tick = useStore((st) => st.tick)
+  const restore = useStore((st) => st.restore)
 
   // Drive the live countdowns (token TTL, doctor grant) — mirrors the
   // prototype's 1-second forceUpdate loop.
@@ -16,6 +17,11 @@ export default function App() {
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [tick])
+
+  // Restaura la sesión si hay un JWT guardado (mantener login al recargar).
+  useEffect(() => {
+    void restore()
+  }, [restore])
 
   return (
     <>

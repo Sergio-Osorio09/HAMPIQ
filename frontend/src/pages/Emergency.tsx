@@ -1,13 +1,13 @@
 import { Box } from '@/components/Box'
 import { s } from '@/lib/style'
 import { useStore } from '@/store/useStore'
-import { VITALS } from '@/services/seed'
 
 export function Emergency() {
-  const { emg, goHome, escanearQR, validarCodigoEmergencia, setEmg, resetEmergencia } = useStore()
-  const alergiasStr = VITALS.alergias.join(', ')
-  const enfermedadesStr = VITALS.enfermedades.join(', ')
-  const medicacionStr = VITALS.medicacion.join(', ')
+  const { emg, emgVitals, goHome, escanearQR, validarCodigoEmergencia, setEmg, resetEmergencia } = useStore()
+  const v = emgVitals
+  const alergiasStr = v ? v.alergias.join(', ') : ''
+  const enfermedadesStr = v ? v.enfermedades.join(', ') : ''
+  const medicacionStr = v ? v.medicacion.join(', ') : ''
 
   return (
     <div style={s('min-height:100vh;background:linear-gradient(170deg,#1a0e10,#2a1216 60%,#1a0e10);display:flex;flex-direction:column;color:#fff;')}>
@@ -61,8 +61,8 @@ export function Emergency() {
                 </div>
                 <div style={s('background:#f7faf9;border:1px solid #e6eeed;border-radius:14px;padding:16px;margin-bottom:18px;')}><div style={s('font-size:12px;font-weight:700;color:#0a5c55;letter-spacing:.04em;margin-bottom:8px;')}>💊 MEDICACIÓN ACTUAL</div><div style={s('font-size:14.5px;font-weight:600;')}>{medicacionStr}</div></div>
                 <div style={s('background:#0f211f;color:#fff;border-radius:14px;padding:18px;display:flex;align-items:center;justify-content:space-between;')}>
-                  <div><div style={s('font-size:11.5px;color:#7fb8b2;font-weight:600;letter-spacing:.04em;margin-bottom:4px;')}>CONTACTO DE EMERGENCIA</div><div style={s('font-size:16px;font-weight:700;')}>{VITALS.contacto.nombre} <span style={s('font-size:13px;color:#9fc4bf;font-weight:500;')}>· {VITALS.contacto.relacion}</span></div></div>
-                  <a href="tel:+51998123456" style={s('text-decoration:none;background:#0d7d74;color:#fff;font-size:15px;font-weight:700;padding:12px 18px;border-radius:11px;display:flex;align-items:center;gap:8px;')}>📞 {VITALS.contacto.telefono}</a>
+                  <div><div style={s('font-size:11.5px;color:#7fb8b2;font-weight:600;letter-spacing:.04em;margin-bottom:4px;')}>CONTACTO DE EMERGENCIA</div><div style={s('font-size:16px;font-weight:700;')}>{v?.contacto.nombre} <span style={s('font-size:13px;color:#9fc4bf;font-weight:500;')}>· {v?.contacto.relacion}</span></div></div>
+                  <a href="tel:+51998123456" style={s('text-decoration:none;background:#0d7d74;color:#fff;font-size:15px;font-weight:700;padding:12px 18px;border-radius:11px;display:flex;align-items:center;gap:8px;')}>📞 {v?.contacto.telefono}</a>
                 </div>
               </div>
               <div style={s('background:#f7faf9;border-top:1px solid #eaeeed;padding:14px 28px;font-size:12px;color:#8a9a98;text-align:center;')}>🔒 Este acceso fue registrado en la auditoría inmutable del paciente. No incluye el historial clínico completo.</div>

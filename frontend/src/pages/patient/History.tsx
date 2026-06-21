@@ -2,11 +2,10 @@ import { Box } from '@/components/Box'
 import { s } from '@/lib/style'
 import { useStore } from '@/store/useStore'
 import { computeHistoryView } from '@/store/selectors'
-import { HISTORY } from '@/services/seed'
 
 export function History() {
-  const { extraHistory, openEvent } = useStore()
-  const historyView = computeHistoryView(extraHistory, HISTORY)
+  const { history, openEvent } = useStore()
+  const historyView = computeHistoryView(history)
 
   return (
     <div style={s('animation:hq-fade .35s ease both;')}>

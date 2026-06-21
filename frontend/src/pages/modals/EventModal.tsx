@@ -2,15 +2,14 @@ import { s } from '@/lib/style'
 import { fmtDate } from '@/lib/format'
 import { useStore } from '@/store/useStore'
 import { EST_C, TIPO_C } from '@/store/selectors'
-import { HISTORY } from '@/services/seed'
 
 const CARD = 'background:#fff;border:1px solid #eaeeed;border-radius:14px;padding:18px;'
 const SECTION_LABEL = 'font-size:11.5px;font-weight:700;color:#8a9a98;letter-spacing:.04em;margin-bottom:8px;'
 
 export function EventModal() {
-  const { modalEvent, extraHistory, closeEvent } = useStore()
+  const { modalEvent, history, closeEvent } = useStore()
   if (!modalEvent) return null
-  const e = [...extraHistory, ...HISTORY].find((x) => x.id === modalEvent)
+  const e = history.find((x) => x.id === modalEvent)
   if (!e) return null
 
   const tc = TIPO_C[e.tipo] || { bg: '#eef1f1', fg: '#516160' }

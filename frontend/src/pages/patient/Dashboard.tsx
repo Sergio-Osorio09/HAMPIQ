@@ -1,16 +1,15 @@
 import { s } from '@/lib/style'
 import { useStore } from '@/store/useStore'
 import { computeAuditView, computeLiveTokens } from '@/store/selectors'
-import { HISTORY, VITALS } from '@/services/seed'
 
 export function Dashboard() {
-  const { tokens, audit, now, pgo, copiarToken, revocarToken } = useStore()
+  const { tokens, audit, now, history, vitals, pgo, copiarToken, revocarToken } = useStore()
   const liveTokens = computeLiveTokens(tokens, now)
   const activeToken = liveTokens.find((t) => t.isActiva) || null
   const tokensActivos = liveTokens.filter((t) => t.isActiva).length
   const auditView = computeAuditView(audit)
-  const alergiasStr = VITALS.alergias.join(', ')
-  const enfermedadesStr = VITALS.enfermedades.join(', ')
+  const alergiasStr = vitals.alergias.join(', ')
+  const enfermedadesStr = vitals.enfermedades.join(', ')
 
   return (
     <div style={s('animation:hq-fade .35s ease both;')}>
@@ -30,7 +29,7 @@ export function Dashboard() {
         </div>
         <div style={s('background:#fff;border:1px solid #eaeeed;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(15,33,31,.03);')}>
           <div style={s('font-size:13px;color:#516160;font-weight:500;margin-bottom:10px;')}>Eventos en mi historial</div>
-          <div style={s('font-size:32px;font-weight:800;letter-spacing:-.02em;')}>{HISTORY.length}</div>
+          <div style={s('font-size:32px;font-weight:800;letter-spacing:-.02em;')}>{history.length}</div>
           <div style={s('font-size:12px;color:#8a9a98;margin-top:2px;')}>registros clínicos</div>
         </div>
         <div style={s('background:#fff;border:1px solid #eaeeed;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(15,33,31,.03);')}>
@@ -70,7 +69,7 @@ export function Dashboard() {
         <div style={s('background:#fff;border:1px solid #eaeeed;border-radius:18px;padding:22px;box-shadow:0 1px 2px rgba(15,33,31,.03);')}>
           <div style={s('display:flex;align-items:center;gap:8px;margin-bottom:16px;')}><span style={s('width:8px;height:8px;border-radius:50%;background:#e23b48;')} /><span style={s('font-size:12px;font-weight:700;color:#0f211f;letter-spacing:.04em;')}>DATOS VITALES</span></div>
           <div style={s('display:flex;flex-direction:column;gap:12px;')}>
-            <div style={s('display:flex;justify-content:space-between;align-items:center;')}><span style={s('font-size:13.5px;color:#516160;')}>Grupo sanguíneo</span><span style={s('font-size:14px;font-weight:700;color:#c0202f;')}>{VITALS.sangre}</span></div>
+            <div style={s('display:flex;justify-content:space-between;align-items:center;')}><span style={s('font-size:13.5px;color:#516160;')}>Grupo sanguíneo</span><span style={s('font-size:14px;font-weight:700;color:#c0202f;')}>{vitals.sangre}</span></div>
             <div style={s('display:flex;justify-content:space-between;align-items:flex-start;gap:12px;')}><span style={s('font-size:13.5px;color:#516160;')}>Alergias</span><span style={s('font-size:13.5px;font-weight:600;text-align:right;')}>{alergiasStr}</span></div>
             <div style={s('display:flex;justify-content:space-between;align-items:flex-start;gap:12px;')}><span style={s('font-size:13.5px;color:#516160;')}>Enfermedades</span><span style={s('font-size:13.5px;font-weight:600;text-align:right;')}>{enfermedadesStr}</span></div>
           </div>

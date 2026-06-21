@@ -6,8 +6,8 @@ const ROLE_FG: Record<string, string> = { medico: '#1d4ed8', admin: '#7c3aed', p
 const ROLE_LABEL: Record<string, string> = { medico: 'Médico', admin: 'Administrador', paciente: 'Paciente' }
 
 export function AdminUsers() {
-  const { users } = useStore()
-  const allUsers = users.map((u) => ({
+  const { allUsers } = useStore()
+  const rows = allUsers.map((u) => ({
     ...u,
     nombre: `${u.nombres} ${u.apellidos}`,
     roleLabel: ROLE_LABEL[u.role] || 'Paciente',
@@ -21,7 +21,7 @@ export function AdminUsers() {
       <h1 style={s('font-size:30px;font-weight:800;letter-spacing:-.025em;margin:0 0 6px;')}>Usuarios</h1>
       <p style={s('font-size:14.5px;color:#516160;margin:0 0 26px;')}>Cuentas registradas en la plataforma.</p>
       <div style={s('background:#fff;border:1px solid #eaeeed;border-radius:18px;padding:8px 22px;box-shadow:0 1px 2px rgba(15,33,31,.03);')}>
-        {allUsers.map((u) => (
+        {rows.map((u) => (
           <div key={u.dni} style={s('display:flex;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid #f5f7f6;')}>
             <span style={s(`width:40px;height:40px;border-radius:50%;background:${u.roleBg};color:${u.roleFg};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex:none;`)}>{u.initials}</span>
             <div style={s('flex:1;')}><div style={s('font-size:14.5px;font-weight:600;')}>{u.nombre}</div><div style={s("font-size:12.5px;color:#8a9a98;font-family:'JetBrains Mono',monospace;")}>DNI {u.dni}</div></div>
