@@ -18,7 +18,7 @@ function Shell({ icon, title, onClose, children, footer }: { icon: string; title
       <div onClick={(e) => e.stopPropagation()} style={s('width:100%;max-width:520px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.5);animation:hq-pop .3s ease both;')}>
         <div style={s('padding:22px 26px;border-bottom:1px solid #eaeeed;display:flex;align-items:center;justify-content:space-between;')}>
           <div style={s('display:flex;align-items:center;gap:11px;')}><span style={s('width:38px;height:38px;border-radius:11px;background:#e7f3f1;display:flex;align-items:center;justify-content:center;font-size:18px;')}>{icon}</span><h2 style={s('font-size:18px;font-weight:800;margin:0;')}>{title}</h2></div>
-          <button onClick={onClose} style={s('width:34px;height:34px;border-radius:10px;border:1px solid #e6eeed;background:#fff;color:#516160;font-size:16px;cursor:pointer;')}>✕</button>
+          <button onClick={onClose} aria-label="Cerrar" style={s('width:34px;height:34px;border-radius:10px;border:1px solid #e6eeed;background:#fff;color:#516160;font-size:16px;cursor:pointer;')}>✕</button>
         </div>
         <div style={s('padding:22px 26px;')}>{children}</div>
         <div style={s('padding:16px 26px;border-top:1px solid #eaeeed;display:flex;gap:10px;justify-content:flex-end;')}>{footer}</div>

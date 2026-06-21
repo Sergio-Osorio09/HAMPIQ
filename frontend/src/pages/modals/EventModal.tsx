@@ -36,7 +36,7 @@ export function EventModal() {
               <h2 style={s('font-size:23px;font-weight:800;letter-spacing:-.02em;margin:0;')}>{e.titulo}</h2>
               <div style={s('font-size:13px;color:#516160;margin-top:6px;')}>{e.medico} · {e.especialidad} · {e.estab}</div>
             </div>
-            <button onClick={closeEvent} style={s('width:38px;height:38px;border-radius:11px;border:1px solid #e6eeed;background:#fff;color:#516160;font-size:18px;cursor:pointer;flex:none;line-height:1;')}>✕</button>
+            <button onClick={closeEvent} aria-label="Cerrar" style={s('width:38px;height:38px;border-radius:11px;border:1px solid #e6eeed;background:#fff;color:#516160;font-size:18px;cursor:pointer;flex:none;line-height:1;')}>✕</button>
           </div>
         </div>
 

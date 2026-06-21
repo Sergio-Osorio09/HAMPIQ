@@ -30,7 +30,7 @@ export function Card() {
               ))}
             </div>
           </div>
-          <div style={s("font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#5fd6cb;")}>EMG-45872136</div>
+          <div style={s("font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#5fd6cb;")}>{vitals.emergencyCode ?? '—'}</div>
           <div style={s('font-size:12px;color:#7fb8b2;margin-top:4px;')}>Juan Carlos Pérez Quispe</div>
         </div>
         <div style={s('background:#fff;border:1px solid #eaeeed;border-radius:18px;padding:24px;box-shadow:0 1px 2px rgba(15,33,31,.03);')}>

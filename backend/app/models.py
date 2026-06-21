@@ -34,6 +34,7 @@ class Vitals(Base):
     enfermedades = Column(JSON, nullable=False)
     medicacion = Column(JSON, nullable=False)
     contacto = Column(JSON, nullable=False)  # {nombre, relacion, telefono}
+    emergency_code = Column(String, index=True, nullable=True)  # código QR aleatorio del paciente
 
 
 class Token(Base):
@@ -124,3 +125,19 @@ class SessionDevice(Base):
     lugar = Column(String, nullable=True)
     actual = Column(Boolean, default=False)
     ultimo = Column(String, nullable=True)
+
+
+class Grant(Base):
+    """Concesión de acceso al historial que un token médico habilita.
+
+    La crea `/access/validate` al validar un token; vence cuando vence el token.
+    Las lecturas/escrituras del historial por parte del médico exigen una
+    concesión vigente (regla de negocio: el médico solo accede con token vigente).
+    """
+    __tablename__ = "concesiones_acceso"
+    id = Column(Integer, primary_key=True)
+    medico_dni = Column(String(8), index=True, nullable=False)
+    patient_dni = Column(String(8), index=True, nullable=False)
+    token_code = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False)
+    expires_at = Column(DateTime(timezone=True), nullable=False)

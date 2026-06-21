@@ -1,3 +1,4 @@
+import secrets
 import time
 from datetime import timedelta
 
@@ -25,6 +26,7 @@ def seed_if_empty(db: Session) -> None:
     db.add(models.Vitals(
         patient_dni=data.PATIENT_DNI, sangre=v["sangre"], alergias=v["alergias"],
         enfermedades=v["enfermedades"], medicacion=v["medicacion"], contacto=v["contacto"],
+        emergency_code=f"EMG-{secrets.token_hex(4).upper()}",
     ))
 
     base = time.time()

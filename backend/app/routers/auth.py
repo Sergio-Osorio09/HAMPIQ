@@ -6,13 +6,14 @@ from sqlalchemy.orm import Session
 from .. import models, schemas, serializers
 from ..database import get_db
 from ..deps import get_current_user
+from ..ratelimit import rate_limit
 from ..security import create_access_token, hash_password, verify_password
 
 router = APIRouter(prefix="/api", tags=["auth"])
 
 
 @router.get("/reniec/{dni}")
-def reniec_lookup(dni: str, db: Session = Depends(get_db)):
+def reniec_lookup(dni: str, db: Session = Depends(get_db), _rl: None = Depends(rate_limit("reniec", 20, 60))):
     if not re.fullmatch(r"\d{8}", dni):
         raise HTTPException(status_code=400, detail="El DNI debe tener exactamente 8 dígitos.")
     r = db.query(models.ReniecRecord).filter(models.ReniecRecord.dni == dni).first()
@@ -43,7 +44,7 @@ def register(body: schemas.RegisterRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/auth/login")
-def login(body: schemas.LoginRequest, db: Session = Depends(get_db)):
+def login(body: schemas.LoginRequest, db: Session = Depends(get_db), _rl: None = Depends(rate_limit("login", 20, 60))):
     user = db.query(models.User).filter(models.User.dni == body.dni.strip()).first()
     if not user or not verify_password(body.password, user.password_hash):
         raise HTTPException(status_code=401, detail="DNI o contraseña incorrectos.")

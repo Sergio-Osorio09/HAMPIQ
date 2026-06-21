@@ -3,4 +3,5 @@ __pycache__/
 *.pyc
 *.pyo
 hampiq.db
+.jwt_secret
 .env

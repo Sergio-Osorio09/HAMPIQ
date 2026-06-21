@@ -254,11 +254,13 @@ export const useStore = create<Store>((set, get) => ({
         ])
         set({ medicines, vitals, tokens, history, audit, sessions, recetas, pendingStudies })
       } else if (role === 'medico') {
-        const [medicines, vitals, history, audit, recetas, pendingStudies] = await Promise.all([
-          api.get<Medicine[]>('/medicines'), api.get<Vitals>('/vitals'), api.get<ClinicalEvent[]>('/history'),
+        // El historial NO se carga aquí: el médico solo accede tras validar un token
+        // (la concesión se obtiene en validarTokenMedico, que entonces sí carga el historial).
+        const [medicines, vitals, audit, recetas, pendingStudies] = await Promise.all([
+          api.get<Medicine[]>('/medicines'), api.get<Vitals>('/vitals'),
           api.get<AuditEntry[]>('/audit'), api.get<Receta[]>('/recetas'), api.get<PendingStudy[]>('/studies'),
         ])
-        set({ medicines, vitals, history, audit, recetas, pendingStudies })
+        set({ medicines, vitals, audit, recetas, pendingStudies })
       } else {
         const [medicines, allUsers, tokens, audit, history] = await Promise.all([
           api.get<Medicine[]>('/medicines'), api.get<Account[]>('/admin/users'), api.get<Token[]>('/admin/tokens'),

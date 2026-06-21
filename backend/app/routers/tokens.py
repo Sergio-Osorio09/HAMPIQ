@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from .. import models, schemas, serializers
 from ..database import get_db
 from ..deps import require_role
+from ..ratelimit import rate_limit
 from ..util import gen_code, now_utc, to_ms
 
 router = APIRouter(prefix="/api", tags=["tokens"])
@@ -51,7 +52,7 @@ def revoke_token(code: str, request: Request, user: models.User = Depends(requir
 
 
 @router.post("/access/validate")
-def validate_token(body: schemas.CodeRequest, request: Request, user: models.User = Depends(require_role("medico")), db: Session = Depends(get_db)):
+def validate_token(body: schemas.CodeRequest, request: Request, user: models.User = Depends(require_role("medico")), db: Session = Depends(get_db), _rl: None = Depends(rate_limit("access", 12, 60))):
     raw = (body.code or "").upper().replace(" ", "")
     now = now_utc()
     t = db.query(models.Token).filter(models.Token.code == raw).first()
@@ -68,6 +69,7 @@ def validate_token(body: schemas.CodeRequest, request: Request, user: models.Use
     t.medico = med_name
     if t.uses_left <= 0:
         t.status = "agotada"
+    db.add(models.Grant(medico_dni=user.dni, patient_dni=t.patient_dni, token_code=t.code, created_at=now, expires_at=t.expires_at))
     db.add(models.AuditEntry(ts=now, patient_dni=t.patient_dni, actor=med_name, actor_dni=user.dni,
                              rol="medico", accion="Consultó historial mediante token", ref=raw, ip=_ip(request), disp="Web · Consultorio"))
     db.commit()

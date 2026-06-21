@@ -43,7 +43,7 @@ export function Emergency() {
             {emg.error && (
               <div style={s('background:#3a1418;border:1px solid #6a2a30;color:#ff9aa3;font-size:13px;font-weight:500;padding:11px 14px;border-radius:10px;margin-top:14px;')}>{emg.error}</div>
             )}
-            <div style={s('font-size:12px;color:#7a4f53;margin-top:18px;')}>Demo: código del paciente <strong style={s("color:#c98e93;font-family:'JetBrains Mono',monospace;")}>EMG-45872136</strong></div>
+            <div style={s('font-size:12px;color:#7a4f53;margin-top:18px;')}>El código aparece en la <strong style={s('color:#c98e93;')}>Tarjeta de emergencia</strong> del paciente.</div>
           </div>
         )}
 

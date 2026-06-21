@@ -16,6 +16,34 @@ def _patient_for(user: models.User) -> str:
     return user.dni if user.role == "paciente" else data.PATIENT_DNI
 
 
+def _active_grant(user: models.User, db: Session):
+    return (
+        db.query(models.Grant)
+        .filter(
+            models.Grant.medico_dni == user.dni,
+            models.Grant.patient_dni == data.PATIENT_DNI,
+            models.Grant.expires_at > now_utc(),
+        )
+        .first()
+    )
+
+
+def _history_patient(user: models.User, db: Session) -> str:
+    """Paciente: su propio historial. Admin: supervisión. Médico: requiere concesión vigente."""
+    if user.role == "paciente":
+        return user.dni
+    if user.role == "admin":
+        return data.PATIENT_DNI
+    if not _active_grant(user, db):
+        raise HTTPException(status_code=403, detail="Necesitas un token vigente del paciente para acceder a su historial.")
+    return data.PATIENT_DNI
+
+
+def _require_grant(user: models.User, db: Session) -> None:
+    if not _active_grant(user, db):
+        raise HTTPException(status_code=403, detail="Token de acceso expirado o ausente. Valida un token vigente del paciente.")
+
+
 def _ip(request: Request) -> str | None:
     return request.client.host if request.client else None
 
@@ -25,14 +53,17 @@ def vitals(user: models.User = Depends(get_current_user), db: Session = Depends(
     v = db.query(models.Vitals).filter(models.Vitals.patient_dni == _patient_for(user)).first()
     if not v:
         raise HTTPException(status_code=404, detail="Sin datos vitales")
-    return serializers.vitals_out(v)
+    out = serializers.vitals_out(v)
+    if user.role == "paciente":
+        out["emergencyCode"] = v.emergency_code  # solo el dueño ve su código de emergencia
+    return out
 
 
 @router.get("/history")
 def history(user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     evs = (
         db.query(models.ClinicalEvent)
-        .filter(models.ClinicalEvent.patient_dni == _patient_for(user), models.ClinicalEvent.deleted_at.is_(None))
+        .filter(models.ClinicalEvent.patient_dni == _history_patient(user, db), models.ClinicalEvent.deleted_at.is_(None))
         .order_by(models.ClinicalEvent.created_ts.desc())
         .all()
     )
@@ -41,6 +72,7 @@ def history(user: models.User = Depends(get_current_user), db: Session = Depends
 
 @router.post("/history")
 def add_note(body: schemas.NoteCreate, request: Request, user: models.User = Depends(require_role("medico")), db: Session = Depends(get_db)):
+    _require_grant(user, db)
     if not body.titulo.strip() or not body.diagnostico.strip():
         raise HTTPException(status_code=400, detail="Completa al menos el título y el diagnóstico.")
     now = time.time()
@@ -70,6 +102,7 @@ def list_recetas(user: models.User = Depends(get_current_user), db: Session = De
 
 @router.post("/recetas")
 def add_receta(body: schemas.RxCreate, request: Request, user: models.User = Depends(require_role("medico")), db: Session = Depends(get_db)):
+    _require_grant(user, db)
     if not body.medNombre.strip() or not body.dosis.strip():
         raise HTTPException(status_code=400, detail="Indica el medicamento y la dosis.")
     now = time.time()
@@ -96,6 +129,7 @@ def list_studies(user: models.User = Depends(get_current_user), db: Session = De
 
 @router.post("/studies")
 def add_study(body: schemas.StudyCreate, request: Request, user: models.User = Depends(require_role("medico")), db: Session = Depends(get_db)):
+    _require_grant(user, db)
     if not body.nombre.strip():
         raise HTTPException(status_code=400, detail="Indica el estudio a solicitar.")
     now = time.time()

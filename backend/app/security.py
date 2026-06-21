@@ -9,7 +9,10 @@ import jwt
 
 from .config import JWT_ALG, JWT_EXPIRE_MIN, JWT_SECRET
 
-_ITERATIONS = 100_000
+# 600k iteraciones PBKDF2-SHA256 (alineado con la guía OWASP actual).
+# verify_password lee el nº de iteraciones del propio hash, así que los hashes
+# antiguos siguen verificándose; solo los nuevos usan este valor.
+_ITERATIONS = 600_000
 
 
 def hash_password(password: str) -> str:

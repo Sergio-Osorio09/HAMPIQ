@@ -5,12 +5,32 @@ datos a PostgreSQL + Redis (según el DAS). Aquí se priorizó correr sin instal
 nada más que Python.
 """
 import os
+import secrets
+from pathlib import Path
 
 # Base de datos: SQLite local (archivo hampiq.db en backend/).
 DATABASE_URL = os.environ.get("HAMPIQ_DATABASE_URL", "sqlite:///./hampiq.db")
 
-# JWT
-JWT_SECRET = os.environ.get("HAMPIQ_JWT_SECRET", "hampiq-dev-secret-cambia-esto")
+
+# JWT — el secreto se toma de la variable de entorno HAMPIQ_JWT_SECRET. Si no existe,
+# se genera uno aleatorio y se persiste localmente (.jwt_secret, gitignored), para nunca
+# usar un valor fijo conocido embebido en el código.
+def _jwt_secret() -> str:
+    env = os.environ.get("HAMPIQ_JWT_SECRET")
+    if env:
+        return env
+    path = Path(__file__).resolve().parent.parent / ".jwt_secret"
+    if path.exists():
+        return path.read_text(encoding="utf-8").strip()
+    token = secrets.token_urlsafe(48)
+    try:
+        path.write_text(token, encoding="utf-8")
+    except OSError:
+        pass
+    return token
+
+
+JWT_SECRET = _jwt_secret()
 JWT_ALG = "HS256"
 JWT_EXPIRE_MIN = 60 * 8  # 8 horas
 
