@@ -37,6 +37,18 @@ JWT_EXPIRE_MIN = 60 * 8  # 8 horas
 # Tokens médicos: alfabeto sin caracteres ambiguos (igual que el prototipo).
 TOKEN_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"
 
+
+# Demo: el código de emergencia de cada paciente es aleatorio (ver seed.py) y la
+# pantalla de Emergencia es pre-login, así que no puede conocerlo. Con esta bandera
+# activada, GET /emergency/demo-code expone el código del paciente semilla para que
+# el botón "Simular escaneo de QR" resuelva un código real. Apagada por defecto;
+# debe permanecer apagada en producción para no filtrar el código aleatorio.
+def _env_flag(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+DEMO_EMERGENCY = _env_flag("HAMPIQ_DEMO_EMERGENCY")
+
 # CORS: orígenes del frontend en desarrollo (Vite).
 CORS_ORIGINS = [
     "http://localhost:5173",

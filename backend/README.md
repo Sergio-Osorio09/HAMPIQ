@@ -63,7 +63,7 @@ python -m venv .venv
 - **Historial:** `GET /history` · `POST /history` (médico)
 - **Recetas / Estudios:** `GET|POST /recetas` · `GET|POST /studies`
 - **Auditoría / Sesiones:** `GET /audit` · `GET /sessions` · `DELETE /sessions/{id}`
-- **Emergencia (público):** `POST /emergency/validate`
+- **Emergencia (público):** `POST /emergency/validate` · `GET /emergency/demo-code` (solo demo, requiere `HAMPIQ_DEMO_EMERGENCY=1`)
 - **Vitales / Medicinas:** `GET /vitals` · `GET /medicines`
 - **Admin:** `GET /admin/users` · `GET /admin/tokens` · `GET /admin/audit`
 

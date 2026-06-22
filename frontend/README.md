@@ -36,8 +36,11 @@ npm run preview  # sirve el build de producción
 | Admin   | `10000001` | `admin123`  |
 
 Desde la landing también hay accesos rápidos por rol (saltan el login) y un modo
-**Emergencia** (código demo `EMG-45872136`). DNIs de prueba para registro/RENIEC:
-`45872136`, `70112233`, `08456712`.
+**Emergencia**. El código de emergencia de cada paciente es **aleatorio** y solo el
+paciente lo ve en su *Tarjeta de emergencia*. Para que el botón «Simular escaneo de
+QR» funcione en la demo, arranca el backend con `HAMPIQ_DEMO_EMERGENCY=1` (expone el
+código del paciente semilla a la pantalla de Emergencia); de lo contrario, ingresa el
+código manualmente. DNIs de prueba para registro/RENIEC: `45872136`, `70112233`, `08456712`.
 
 ## Estructura
 

@@ -131,7 +131,7 @@ La **landing** ofrece accesos rápidos por rol (demo) que saltan el login: `quic
 **Cómo se usa.**
 1. Desde la landing → *Emergencia* (no requiere sesión).
 2. Dos vías: **Escanear QR** (`escanearQR`, simulación ~1.4 s) o **ingresar código** de emergencia y validarlo (`validarCodigoEmergencia`).
-3. Código de demo válido: `EMG-45872136`. Cualquier otro → "Código de emergencia inválido".
+3. El código de emergencia es **aleatorio por paciente** (lo ve el paciente en su *Tarjeta de emergencia*). El botón «Simular escaneo de QR» solo resuelve un código real si el backend corre con `HAMPIQ_DEMO_EMERGENCY=1` (endpoint `GET /emergency/demo-code`, apagado por defecto); si está apagado, invita a ingresar el código manualmente. Un código inexistente → "Código de emergencia inválido".
 4. Al validar muestra **solo**: grupo sanguíneo, alergias, enfermedades crónicas, medicación actual y contacto de emergencia. **No** expone consultas, diagnósticos ni el historial completo.
 5. El acceso se registra en auditoría como "Acceso en modo emergencia (datos vitales)".
 

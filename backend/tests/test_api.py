@@ -82,3 +82,20 @@ def test_emergencia_codigo_aleatorio(client):
 def test_medico_no_recibe_codigo_emergencia(client):
     med = _login(client, "40221785", "medico123")
     assert "emergencyCode" not in client.get("/api/vitals", headers=_h(med)).json()
+
+
+def test_demo_code_apagado_por_defecto(client):
+    # Sin HAMPIQ_DEMO_EMERGENCY el endpoint no existe (404): el código no se filtra.
+    assert client.get("/api/emergency/demo-code").status_code == 404
+
+
+def test_demo_code_encendido_resuelve_escaneo(client, monkeypatch):
+    from app import config
+
+    monkeypatch.setattr(config, "DEMO_EMERGENCY", True)
+    r = client.get("/api/emergency/demo-code")
+    assert r.status_code == 200
+    code = r.json()["code"]
+    assert code.startswith("EMG-")
+    # El código expuesto para la demo valida la emergencia (lo que usa "Escanear QR").
+    assert client.post("/api/emergency/validate", json={"code": code}).status_code == 200

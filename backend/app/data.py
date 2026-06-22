@@ -105,5 +105,3 @@ SESSIONS = [
     {"id": "s2", "disp": "App móvil · Android 14", "ip": "190.233.46.77", "lugar": "Lima, Perú", "actual": False, "ultimo": "Hace 2 horas"},
     {"id": "s3", "disp": "Safari · iPhone", "ip": "181.65.20.3", "lugar": "Arequipa, Perú", "actual": False, "ultimo": "Hace 5 días"},
 ]
-
-EMERGENCY_CODE = "EMG-45872136"

@@ -81,7 +81,9 @@ se crea y se siembra automáticamente en el primer arranque. Más detalles y sol
 | Administrador | `10000001` | `admin123`  |
 
 - DNIs de prueba para registro / RENIEC: `45872136`, `70112233`, `08456712`.
-- Código de emergencia de demostración: `EMG-45872136`.
+- Código de emergencia: **aleatorio por paciente** (visible en su *Tarjeta de emergencia*).
+  Para que el botón «Simular escaneo de QR» de la pantalla de Emergencia resuelva un
+  código real, arranca el backend con `HAMPIQ_DEMO_EMERGENCY=1`.
 
 ## Estado y alcance
 

@@ -1,12 +1,26 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
-from .. import models, schemas, serializers
+from .. import config, data, models, schemas, serializers
 from ..database import get_db
 from ..ratelimit import rate_limit
 from ..util import now_utc
 
 router = APIRouter(prefix="/api", tags=["emergency"])
+
+
+@router.get("/emergency/demo-code")
+def emergency_demo_code(db: Session = Depends(get_db)):
+    """Solo-demo: devuelve el código de emergencia (aleatorio) del paciente semilla
+    para que el botón "Simular escaneo de QR" resuelva un código real sin login.
+    Deshabilitado salvo que HAMPIQ_DEMO_EMERGENCY esté activo (404 en caso contrario),
+    de modo que el código del paciente nunca se filtra en producción."""
+    if not config.DEMO_EMERGENCY:
+        raise HTTPException(status_code=404, detail="No encontrado")
+    v = db.query(models.Vitals).filter(models.Vitals.patient_dni == data.PATIENT_DNI).first()
+    if not v or not v.emergency_code:
+        raise HTTPException(status_code=404, detail="No encontrado")
+    return {"code": v.emergency_code}
 
 
 @router.post("/emergency/validate")

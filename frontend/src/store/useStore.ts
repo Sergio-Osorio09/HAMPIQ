@@ -401,7 +401,10 @@ export const useStore = create<Store>((set, get) => ({
   setEmg: (k, v) => set((s) => ({ emg: { ...s.emg, [k]: v } })),
   escanearQR: () => {
     set((s) => ({ emg: { ...s.emg, scanning: true, error: '' } }))
-    setTimeout(() => { void emergencyValidate('EMG-45872136', true) }, 1400)
+    // El código de emergencia es aleatorio por paciente y esta pantalla es pre-login,
+    // así que no lo conoce. Para la demo se pide al backend el código del paciente
+    // semilla y se valida como si la cámara lo hubiera leído del QR (~1.4 s de escaneo).
+    setTimeout(() => { void scanDemoCode() }, 1400)
   },
   validarCodigoEmergencia: () => {
     const raw = (get().emg.codeInput || '').toUpperCase().replace(/\s/g, '')
@@ -495,6 +498,22 @@ async function demoLogin(dni: string, password: string): Promise<void> {
     await bootstrap()
   } catch (e) {
     showToast(errMsg(e), 'err')
+  }
+}
+
+// Demo del escaneo de QR: el código del paciente semilla solo lo expone el backend
+// cuando corre con HAMPIQ_DEMO_EMERGENCY=1. Si está apagado (404), el "escaneo" no
+// está disponible y se invita a ingresar el código manualmente, en vez de fallar
+// con un código fijo (que es lo que rompió la auditoría al aleatorizar el código).
+async function scanDemoCode(): Promise<void> {
+  try {
+    const { code } = await api.get<{ code: string }>('/emergency/demo-code')
+    await emergencyValidate(code, true)
+  } catch (e) {
+    const msg = e instanceof ApiError && e.status === 404
+      ? 'El escaneo de demostración no está disponible. Ingresa el código de emergencia del paciente manualmente.'
+      : errMsg(e)
+    useStore.setState((s) => ({ emg: { ...s.emg, scanning: false, error: msg } }))
   }
 }
 
