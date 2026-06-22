@@ -1,4 +1,4 @@
-import random
+import secrets
 from datetime import datetime, timezone
 
 from .config import TOKEN_ALPHABET
@@ -19,7 +19,10 @@ def to_ms(dt: datetime | None) -> int:
 
 
 def gen_code() -> str:
-    part = lambda: "".join(random.choice(TOKEN_ALPHABET) for _ in range(4))  # noqa: E731
+    # Token de acceso al historial clínico: usa un PRNG criptográfico (secrets),
+    # no random/Mersenne Twister, para que el código no sea predecible a partir
+    # de otros emitidos.
+    part = lambda: "".join(secrets.choice(TOKEN_ALPHABET) for _ in range(4))  # noqa: E731
     return f"HMPQ-{part()}-{part()}"
 
 

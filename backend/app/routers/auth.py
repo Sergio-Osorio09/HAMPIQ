@@ -11,6 +11,10 @@ from ..security import create_access_token, hash_password, verify_password
 
 router = APIRouter(prefix="/api", tags=["auth"])
 
+# Hash "señuelo": cuando el DNI no existe, igualamos el coste de verificación para
+# no revelar por temporización si una cuenta existe (anti-enumeración de usuarios).
+_DUMMY_HASH = hash_password("hampiq-dummy-password-no-account")
+
 
 @router.get("/reniec/{dni}")
 def reniec_lookup(dni: str, db: Session = Depends(get_db), _rl: None = Depends(rate_limit("reniec", 20, 60))):
@@ -23,7 +27,7 @@ def reniec_lookup(dni: str, db: Session = Depends(get_db), _rl: None = Depends(r
 
 
 @router.post("/auth/register")
-def register(body: schemas.RegisterRequest, db: Session = Depends(get_db)):
+def register(body: schemas.RegisterRequest, db: Session = Depends(get_db), _rl: None = Depends(rate_limit("register", 10, 60))):
     dni = body.dni.strip()
     if not re.fullmatch(r"\d{8}", dni):
         raise HTTPException(status_code=400, detail="El DNI debe tener exactamente 8 dígitos.")
@@ -46,7 +50,12 @@ def register(body: schemas.RegisterRequest, db: Session = Depends(get_db)):
 @router.post("/auth/login")
 def login(body: schemas.LoginRequest, db: Session = Depends(get_db), _rl: None = Depends(rate_limit("login", 20, 60))):
     user = db.query(models.User).filter(models.User.dni == body.dni.strip()).first()
-    if not user or not verify_password(body.password, user.password_hash):
+    # Verificamos siempre (contra un hash señuelo si el usuario no existe) para que
+    # el tiempo de respuesta no delate la existencia de la cuenta.
+    if not user:
+        verify_password(body.password, _DUMMY_HASH)
+        raise HTTPException(status_code=401, detail="DNI o contraseña incorrectos.")
+    if not verify_password(body.password, user.password_hash):
         raise HTTPException(status_code=401, detail="DNI o contraseña incorrectos.")
     return {"token": create_access_token(user.dni, user.role), "user": serializers.user_out(user)}
 
