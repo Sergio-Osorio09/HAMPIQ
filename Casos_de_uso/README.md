@@ -102,6 +102,8 @@ Casos_de_uso/
 
 ## 5. Los casos de prueba explicados en función de HAMPIQ
 
+> 📄 **Documentación detallada de cada prueba** (objetivo, precondiciones, pasos, datos, resultado esperado/obtenido y evidencia con capturas): ver **[DOCUMENTACION_PRUEBAS.md](DOCUMENTACION_PRUEBAS.md)**.
+
 ### CP-01 · Inicio de sesión (CU-02) — `LoginTests.cs`
 
 **Flujo principal — `Login_ConCredencialesValidas_RedirigeAlDashboard`**
