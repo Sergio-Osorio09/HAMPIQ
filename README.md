@@ -39,7 +39,8 @@ HAMPIQ/
 ├─ backend/                   # API FastAPI + SQLite        (ver backend/README.md)
 ├─ HAMPIQ_FUNCIONALIDADES.md  # Especificación funcional (casos de uso CU-01…CU-06)
 ├─ Hampiq_DAS_v1.0.pdf        # Documento de Arquitectura de Software
-└─ hampiq/                    # Prototipo de diseño original (referencia)
+├─ hampiq/                    # Prototipo de diseño original (referencia)
+└─ Casos_de_uso/              # Pruebas automatizadas E2E (Selenium + NUnit) — ver su README
 ```
 
 ## Requisitos
@@ -71,6 +72,15 @@ npm run dev
 Abre **http://localhost:5173** en el navegador. La base de datos SQLite del backend (`hampiq.db`)
 se crea y se siembra automáticamente en el primer arranque. Más detalles y solución de problemas en
 [`frontend/README.md`](frontend/README.md) y [`backend/README.md`](backend/README.md).
+
+## Pruebas automatizadas (E2E)
+
+Pruebas funcionales de extremo a extremo con **Selenium WebDriver + C# (NUnit)**, ejecutables desde
+**Visual Studio Community**, sobre los flujos clave de Hampiq: **inicio de sesión (CU-02)**, **generación de
+token médico (CU-03)** y **modo emergencia (CU-05)**. Requieren el backend y el frontend en ejecución.
+
+➡️ Carpeta [`Casos_de_uso/`](Casos_de_uso/README.md) — guía de uso, [documentación detallada de cada
+prueba](Casos_de_uso/DOCUMENTACION_PRUEBAS.md) y evidencias.
 
 ## Credenciales de demostración
 
