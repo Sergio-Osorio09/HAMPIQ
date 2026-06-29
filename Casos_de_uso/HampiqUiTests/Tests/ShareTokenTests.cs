@@ -40,4 +40,26 @@ public class ShareTokenTests : TestBase
         FormatoToken.IsMatch(codigo).Should()
             .BeTrue($"el token '{codigo}' debe cumplir el formato HMPQ-XXXX-XXXX");
     }
+
+    [Test]
+    [Description("CP-07 · Revocar un token recién generado lo invalida de inmediato.")]
+    public void RevocarToken_DejaElTokenInvalidado()
+    {
+        using var ctx = new UiTestContext(Settings);
+
+        var share = new LandingPage(ctx.Driver, Settings.WaitTimeoutSeconds)
+            .IrAIniciarSesion()
+            .IniciarSesion("45872136", "hampiq123")
+            .IrACompartirAcceso();
+
+        share.SeleccionarDuracion(30).SeleccionarUsos(1).GenerarToken();
+        var codigo = share.ObtenerCodigoToken();   // asegura que el token existe
+
+        share.RevocarTokenGenerado();
+        var toast = share.EsperarToastContenga("revoc");
+        ctx.Capturar("CP-07-token-revocado");
+
+        FormatoToken.IsMatch(codigo).Should().BeTrue();
+        toast.Should().Contain("revocado");
+    }
 }

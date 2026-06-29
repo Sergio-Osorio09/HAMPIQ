@@ -19,7 +19,7 @@ export function DoctorAccess() {
     <div style={s('animation:hq-fade .35s ease both;')}>
       {docGranted ? (
         <div>
-          <div style={s('background:#e7f3f1;border:1px solid #c9e6e1;border-radius:14px;padding:14px 20px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;')}>
+          <div data-testid="doc-granted" style={s('background:#e7f3f1;border:1px solid #c9e6e1;border-radius:14px;padding:14px 20px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;')}>
             <div style={s('display:flex;align-items:center;gap:12px;')}><span style={s('width:36px;height:36px;border-radius:10px;background:#0d7d74;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;')}>✓</span><div><div style={s('font-size:14px;font-weight:700;color:#0a5c55;')}>Acceso autorizado al historial de Juan Carlos Pérez</div><div style={s('font-size:12.5px;color:#5a7a76;')}>Token {doc.grantCode} · acceso de solo lectura</div></div></div>
             <div style={s('text-align:right;')}><div style={s('font-size:11px;color:#5a7a76;font-weight:600;')}>EXPIRA EN</div><div style={s("font-size:20px;font-weight:800;color:#0a5c55;font-family:'JetBrains Mono',monospace;")}>{docGrantRem}</div></div>
           </div>
@@ -68,15 +68,15 @@ export function DoctorAccess() {
           <p style={s('font-size:14.5px;color:#516160;margin:0 0 28px;line-height:1.55;')}>Ingresa el token temporal que te compartió el paciente para acceder a su historial clínico.</p>
           <div style={s('background:#fff;border:1px solid #eaeeed;border-radius:18px;padding:26px;box-shadow:0 4px 16px -8px rgba(15,33,31,.12);text-align:left;')}>
             <label style={s('display:block;font-size:13px;font-weight:600;margin-bottom:9px;')}>Token médico</label>
-            <Box as="input" value={doc.tokenInput} onChange={(e) => setDoc('tokenInput', e.target.value)} placeholder="HMPQ-XXXX-XXXX"
+            <Box as="input" data-testid="doc-token" value={doc.tokenInput} onChange={(e) => setDoc('tokenInput', e.target.value)} placeholder="HMPQ-XXXX-XXXX"
               css="width:100%;border:1.5px solid #d4e0de;border-radius:11px;padding:15px 16px;font-size:18px;font-family:'JetBrains Mono',monospace;text-align:center;letter-spacing:.08em;text-transform:uppercase;background:#fff;margin-bottom:16px;" focus="border-color:#0d7d74;box-shadow:0 0 0 3px #0d7d7422;" />
-            <button onClick={validarTokenMedico} style={s('width:100%;border:none;background:#0d7d74;color:#fff;font-size:15px;font-weight:700;padding:14px;border-radius:11px;cursor:pointer;box-shadow:0 12px 24px -10px #0d7d74cc;')}>
+            <button data-testid="doc-submit" onClick={validarTokenMedico} style={s('width:100%;border:none;background:#0d7d74;color:#fff;font-size:15px;font-weight:700;padding:14px;border-radius:11px;cursor:pointer;box-shadow:0 12px 24px -10px #0d7d74cc;')}>
               {doc.validating
                 ? <span style={s('display:inline-flex;align-items:center;gap:8px;')}><span style={s('width:15px;height:15px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;display:inline-block;animation:hq-spin .7s linear infinite;')} />Validando…</span>
                 : <>Acceder al historial</>}
             </button>
             {doc.error && (
-              <div style={s('background:#fdeaec;border:1px solid #f5c9ce;color:#c0202f;font-size:13px;font-weight:500;padding:11px 14px;border-radius:10px;margin-top:14px;display:flex;align-items:flex-start;gap:8px;')}><span style={s('font-weight:700;')}>!</span><span>{doc.error}</span></div>
+              <div style={s('background:#fdeaec;border:1px solid #f5c9ce;color:#c0202f;font-size:13px;font-weight:500;padding:11px 14px;border-radius:10px;margin-top:14px;display:flex;align-items:flex-start;gap:8px;')}><span style={s('font-weight:700;')}>!</span><span data-testid="doc-error">{doc.error}</span></div>
             )}
             <div style={s('font-size:12px;color:#8a9a98;margin-top:14px;text-align:center;')}>Demo: el paciente Juan Pérez tiene activo <strong style={s("font-family:'JetBrains Mono',monospace;")}>HMPQ-7K2D-9F4X</strong></div>
           </div>

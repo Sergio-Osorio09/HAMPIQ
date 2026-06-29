@@ -52,7 +52,7 @@ export function Medicines() {
 
       <div style={s('position:relative;margin-bottom:22px;max-width:560px;')}>
         <span style={s('position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px;')}>🔍</span>
-        <Box as="input" value={med.query} onChange={(e) => setMedQuery(e.target.value)} placeholder="Busca por nombre, principio activo o categoría…"
+        <Box as="input" data-testid="med-search" value={med.query} onChange={(e) => setMedQuery(e.target.value)} placeholder="Busca por nombre, principio activo o categoría…"
           css="width:100%;border:1.5px solid #d4e0de;border-radius:13px;padding:15px 16px 15px 46px;font-size:15px;background:#fff;box-shadow:0 1px 2px rgba(15,33,31,.03);" focus="border-color:#0d7d74;box-shadow:0 0 0 3px #0d7d7422;" />
       </div>
 
@@ -61,7 +61,7 @@ export function Medicines() {
           {medResults.length > 0 && <div style={s('font-size:12.5px;font-weight:700;letter-spacing:.04em;color:#6b7b79;margin-bottom:14px;')}>{medResults.length} MEDICAMENTOS ENCONTRADOS</div>}
           <div style={s('display:grid;grid-template-columns:repeat(2,1fr);gap:14px;')}>
             {medResults.map((m) => (
-              <Box key={m.id} onClick={() => selectMed(m.id)}
+              <Box key={m.id} data-testid={`med-result-${m.id}`} onClick={() => selectMed(m.id)}
                 css="background:#fff;border:1px solid #eaeeed;border-radius:16px;padding:20px;cursor:pointer;box-shadow:0 1px 2px rgba(15,33,31,.03);transition:box-shadow .15s,border-color .15s,transform .15s;"
                 hover="box-shadow:0 12px 28px -16px rgba(15,33,31,.25);border-color:#cfe3df;transform:translateY(-2px);">
                 <div style={s('display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;')}>
@@ -111,13 +111,13 @@ export function Medicines() {
               <div style={s('background:#fff4f5;border-radius:12px;padding:14px;')}><div style={s('font-size:11.5px;color:#a06066;margin-bottom:4px;')}>Ahorro posible</div><div style={s('font-size:20px;font-weight:800;color:#c0202f;')}>S/ {medSelected.ahorro}</div></div>
             </div>
           </div>
-          <div style={s('font-size:12.5px;font-weight:700;letter-spacing:.04em;color:#6b7b79;margin-bottom:12px;')}>FARMACIAS — ORDENADAS POR PRECIO</div>
+          <div data-testid="med-comparator" style={s('font-size:12.5px;font-weight:700;letter-spacing:.04em;color:#6b7b79;margin-bottom:12px;')}>FARMACIAS — ORDENADAS POR PRECIO</div>
           <div style={s('display:flex;flex-direction:column;gap:10px;')}>
             {medSelected.farmacias.map((f, i) => (
               <div key={i} style={s(`background:#fff;border:1.5px solid ${f.borderColor};border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:16px;box-shadow:0 1px 2px rgba(15,33,31,.03);`)}>
                 <span style={s('width:34px;height:34px;border-radius:9px;background:#f4f7f6;display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;')}>🏪</span>
                 <div style={s('flex:1;min-width:0;')}>
-                  <div style={s('display:flex;align-items:center;gap:9px;')}><span style={s('font-size:15px;font-weight:700;')}>{f.nombre}</span>{f.isCheapest && <span style={s('font-size:10.5px;font-weight:800;background:#0d7d74;color:#fff;padding:3px 9px;border-radius:6px;')}>MÁS BARATO</span>}</div>
+                  <div style={s('display:flex;align-items:center;gap:9px;')}><span style={s('font-size:15px;font-weight:700;')}>{f.nombre}</span>{f.isCheapest && <span data-testid="med-cheapest" style={s('font-size:10.5px;font-weight:800;background:#0d7d74;color:#fff;padding:3px 9px;border-radius:6px;')}>MÁS BARATO</span>}</div>
                   <div style={s('display:flex;align-items:center;gap:9px;margin-top:4px;')}><span style={s(`font-size:11.5px;font-weight:600;background:${f.stockBg};color:${f.stockFg};padding:3px 9px;border-radius:6px;`)}>{f.stock}</span><span style={s('font-size:12px;color:#8a9a98;')}>📍 {f.dist}</span></div>
                 </div>
                 <div style={s('text-align:right;')}><div style={s('font-size:19px;font-weight:800;color:#0f211f;')}>S/ {f.precioStr}</div>{f.hasAhorro && <div style={s('font-size:11px;color:#c0202f;')}>+S/ {f.ahorroVs}</div>}</div>

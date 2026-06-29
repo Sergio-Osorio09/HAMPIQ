@@ -17,6 +17,20 @@ public class LoginPage : BasePage
         return new PatientDashboardPage(Driver, WaitSeconds);
     }
 
+    /// <summary>Inicia sesión como médico y devuelve su pantalla de inicio.</summary>
+    public DoctorHomePage IniciarSesionComoMedico(string dni, string password)
+    {
+        CompletarCredenciales(dni, password);
+        return new DoctorHomePage(Driver, WaitSeconds);
+    }
+
+    /// <summary>Inicia sesión como administrador y devuelve el panel general.</summary>
+    public AdminPanelPage IniciarSesionComoAdmin(string dni, string password)
+    {
+        CompletarCredenciales(dni, password);
+        return new AdminPanelPage(Driver, WaitSeconds);
+    }
+
     /// <summary>Envía el formulario sin asumir éxito (para el flujo alterno de error).</summary>
     public LoginPage IntentarIniciarSesion(string dni, string password)
     {

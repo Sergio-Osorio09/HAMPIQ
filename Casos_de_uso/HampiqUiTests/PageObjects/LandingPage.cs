@@ -21,4 +21,10 @@ public class LandingPage : BasePage
         Click(Tid("landing-emergency"));
         return new EmergencyPage(Driver, WaitSeconds);
     }
+
+    public RegisterPage IrARegistro()
+    {
+        Click(Tid("landing-register"));
+        return new RegisterPage(Driver, WaitSeconds);
+    }
 }

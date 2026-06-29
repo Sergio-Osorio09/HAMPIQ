@@ -34,4 +34,28 @@ public class SharePage : BasePage
 
     /// <summary>Mensaje de confirmación (toast) tras generar el token.</summary>
     public string ObtenerMensajeToast() => WaitVisible(Tid("toast")).Text.Trim();
+
+    /// <summary>Revoca el token recién generado (botón «Revocar» de la tarjeta).</summary>
+    public SharePage RevocarTokenGenerado()
+    {
+        Click(Tid("share-revoke"));
+        return this;
+    }
+
+    /// <summary>Espera hasta que el toast contenga el fragmento indicado y devuelve su texto.</summary>
+    public string EsperarToastContenga(string fragmento) =>
+        Wait.Until(d =>
+        {
+            var els = d.FindElements(Tid("toast"));
+            if (els.Count == 0) return null;
+            var txt = els[0].Text;
+            return txt.Contains(fragmento, StringComparison.OrdinalIgnoreCase) ? txt : null;
+        })!;
+
+    /// <summary>Cierra la sesión del paciente y vuelve a la landing.</summary>
+    public LandingPage CerrarSesion()
+    {
+        Click(Tid("logout"));
+        return new LandingPage(Driver, WaitSeconds);
+    }
 }

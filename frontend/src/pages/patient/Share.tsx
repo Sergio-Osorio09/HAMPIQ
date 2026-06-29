@@ -50,7 +50,7 @@ export function Share() {
               </div>
               <div style={s('display:flex;gap:10px;')}>
                 <button onClick={() => copiarToken(shareGenerated.code)} style={s('flex:1;border:none;background:#0d7d74;color:#fff;font-size:13.5px;font-weight:700;padding:11px;border-radius:9px;cursor:pointer;')}>Copiar</button>
-                <button onClick={() => revocarToken(shareGenerated.code)} style={s('flex:1;border:1px solid #5a2b30;background:transparent;color:#ff9aa3;font-size:13.5px;font-weight:600;padding:11px;border-radius:9px;cursor:pointer;')}>Revocar</button>
+                <button data-testid="share-revoke" onClick={() => revocarToken(shareGenerated.code)} style={s('flex:1;border:1px solid #5a2b30;background:transparent;color:#ff9aa3;font-size:13.5px;font-weight:600;padding:11px;border-radius:9px;cursor:pointer;')}>Revocar</button>
               </div>
             </div>
           </div>

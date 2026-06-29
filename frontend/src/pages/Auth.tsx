@@ -43,9 +43,9 @@ export function Auth() {
 
               <label style={s('display:block;font-size:13px;font-weight:600;color:#0f211f;margin-bottom:7px;')}>Documento de identidad (DNI)</label>
               <div style={s('display:flex;gap:9px;margin-bottom:6px;')}>
-                <Box as="input" value={reg.dni} onChange={(e) => setReg('dni', e.target.value)} placeholder="8 dígitos" maxLength={8} inputMode="numeric"
+                <Box as="input" data-testid="reg-dni" value={reg.dni} onChange={(e) => setReg('dni', e.target.value)} placeholder="8 dígitos" maxLength={8} inputMode="numeric"
                   css="flex:1;border:1.5px solid #d4e0de;border-radius:10px;padding:13px 14px;font-size:15px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;background:#fff;" focus={FOCUS} />
-                <button onClick={validarDni} style={s('border:none;background:#0f211f;color:#fff;font-weight:600;font-size:14px;padding:0 20px;border-radius:10px;cursor:pointer;white-space:nowrap;')}>Validar</button>
+                <button data-testid="reg-validar" onClick={validarDni} style={s('border:none;background:#0f211f;color:#fff;font-weight:600;font-size:14px;padding:0 20px;border-radius:10px;cursor:pointer;white-space:nowrap;')}>Validar</button>
               </div>
               <div style={s('font-size:12px;color:#8a9a98;margin-bottom:16px;')}>Demo RENIEC: prueba <strong>45872136</strong>, <strong>70112233</strong> u <strong>08456712</strong>.</div>
 
@@ -55,10 +55,10 @@ export function Auth() {
 
               {reg.validated && (
                 <div style={s('animation:hq-fade .35s ease both;')}>
-                  <div style={s('background:#e7f3f1;border:1px solid #c9e6e1;border-radius:12px;padding:14px 16px;margin-bottom:18px;')}>
+                  <div data-testid="reg-verified" style={s('background:#e7f3f1;border:1px solid #c9e6e1;border-radius:12px;padding:14px 16px;margin-bottom:18px;')}>
                     <div style={s('display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#0a5c55;margin-bottom:10px;')}><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0a5c55" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /></svg>IDENTIDAD VERIFICADA</div>
                     <div style={s('display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;')}>
-                      <div><div style={s('font-size:11px;color:#5a7a76;')}>Nombres</div><div style={s('font-size:14px;font-weight:600;')}>{reg.nombres}</div></div>
+                      <div><div style={s('font-size:11px;color:#5a7a76;')}>Nombres</div><div data-testid="reg-nombres" style={s('font-size:14px;font-weight:600;')}>{reg.nombres}</div></div>
                       <div><div style={s('font-size:11px;color:#5a7a76;')}>Apellidos</div><div style={s('font-size:14px;font-weight:600;')}>{reg.apellidos}</div></div>
                       <div><div style={s('font-size:11px;color:#5a7a76;')}>Nacimiento</div><div style={s('font-size:14px;font-weight:600;')}>{reg.nacimiento}</div></div>
                       <div><div style={s('font-size:11px;color:#5a7a76;')}>Sexo</div><div style={s('font-size:14px;font-weight:600;')}>{reg.sexo}</div></div>
@@ -76,7 +76,7 @@ export function Auth() {
               )}
 
               {reg.error && (
-                <div style={s('background:#fdeaec;border:1px solid #f5c9ce;color:#c0202f;font-size:13px;font-weight:500;padding:11px 14px;border-radius:10px;margin-top:14px;display:flex;align-items:flex-start;gap:8px;')}><span style={s('font-weight:700;')}>!</span><span>{reg.error}</span></div>
+                <div style={s('background:#fdeaec;border:1px solid #f5c9ce;color:#c0202f;font-size:13px;font-weight:500;padding:11px 14px;border-radius:10px;margin-top:14px;display:flex;align-items:flex-start;gap:8px;')}><span style={s('font-weight:700;')}>!</span><span data-testid="reg-error">{reg.error}</span></div>
               )}
 
               <div style={s('text-align:center;margin-top:22px;font-size:14px;color:#516160;')}>¿Ya tienes cuenta? <button onClick={() => useStore.setState({ authMode: 'login' })} style={s('border:none;background:transparent;color:#0d7d74;font-weight:700;cursor:pointer;font-size:14px;')}>Inicia sesión</button></div>

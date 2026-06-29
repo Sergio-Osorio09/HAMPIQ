@@ -19,7 +19,7 @@ export function Landing() {
         </div>
         <div style={s('display:flex;align-items:center;gap:10px;')}>
           <button data-testid="landing-login" onClick={goLogin} style={s('border:none;background:transparent;font-size:14.5px;font-weight:600;color:#0f211f;padding:11px 18px;border-radius:10px;cursor:pointer;')}>Iniciar sesión</button>
-          <button onClick={goRegister} style={s('border:none;background:#0d7d74;color:#fff;font-size:14.5px;font-weight:600;padding:11px 20px;border-radius:10px;cursor:pointer;box-shadow:0 8px 18px -8px #0d7d74cc;')}>Crear cuenta</button>
+          <button data-testid="landing-register" onClick={goRegister} style={s('border:none;background:#0d7d74;color:#fff;font-size:14.5px;font-weight:600;padding:11px 20px;border-radius:10px;cursor:pointer;box-shadow:0 8px 18px -8px #0d7d74cc;')}>Crear cuenta</button>
         </div>
       </header>
 

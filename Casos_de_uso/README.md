@@ -87,15 +87,20 @@ Casos_de_uso/
    ├─ Support/UiTestContext.cs     ← Ciclo de vida del navegador (IDisposable) + captura de evidencia
    ├─ PageObjects/
    │  ├─ BasePage.cs               ← Esperas explícitas + localización por data-testid
-   │  ├─ LandingPage.cs
-   │  ├─ LoginPage.cs
-   │  ├─ PatientDashboardPage.cs
-   │  ├─ SharePage.cs
+   │  ├─ LandingPage.cs            RegisterPage.cs
+   │  ├─ LoginPage.cs              DoctorHomePage.cs   AdminPanelPage.cs
+   │  ├─ PatientDashboardPage.cs   DoctorAccessPage.cs
+   │  ├─ SharePage.cs              MedicinesPage.cs    AuditPage.cs
    │  └─ EmergencyPage.cs
    └─ Tests/
       ├─ LoginTests.cs             ← CP-01 (CU-02)
-      ├─ ShareTokenTests.cs        ← CP-02 (CU-03)
-      └─ EmergencyTests.cs         ← CP-03 (CU-05)
+      ├─ ShareTokenTests.cs        ← CP-02, CP-07 (CU-03)
+      ├─ EmergencyTests.cs         ← CP-03 (CU-05)
+      ├─ RegisterTests.cs          ← CP-04 (CU-01)
+      ├─ LoginRolesTests.cs        ← CP-05, CP-06 (CU-02)
+      ├─ DoctorAccessTests.cs      ← CP-08 (CU-04)
+      ├─ MedicinesTests.cs         ← CP-09 (soporte)
+      └─ AuditTests.cs             ← CP-10 (soporte)
 ```
 
 ---
@@ -143,6 +148,31 @@ Casos_de_uso/
 2. **Verifica** que se muestra el error *"Código de emergencia inválido…"* y que **no** se revela ningún dato vital.
 
 > Esto valida la promesa de seguridad de HAMPIQ: en emergencia solo se expone el subconjunto vital y nunca con un código inválido.
+
+### CP-04 · Registro con validación RENIEC (CU-01) — `RegisterTests.cs`
+
+**Flujo principal — `Registro_ValidarDniRenec_AutocompletaDatos`**: en *Crear cuenta*, ingresa un DNI y pulsa **"Validar"**; el sistema consulta RENIEC y **autocompleta** los datos oficiales (DNI `08456712` → *Pedro Antonio Huamán Soto*).
+**Flujo alterno — `Registro_DniConFormatoInvalido_MuestraError`**: un DNI sin 8 dígitos muestra *"El DNI debe tener exactamente 8 dígitos."*
+
+> Valida la integración con RENIEC (CU-01). Se prueba la verificación de identidad (idempotente) y no la creación de la cuenta, para que la prueba sea re-ejecutable.
+
+### CP-05 · Login de Médico (CU-02) — `LoginRolesTests.cs`
+Login `40221785 / medico123` → llega a la **pantalla de inicio del médico**. Valida el ruteo por rol.
+
+### CP-06 · Login de Administrador (CU-02) — `LoginRolesTests.cs`
+Login `10000001 / admin123` → llega al **panel general** del administrador.
+
+### CP-07 · Revocar token (CU-03) — `ShareTokenTests.cs`
+Genera un token y pulsa **"Revocar"** → toast *"Token revocado. El acceso fue invalidado."* Valida que el paciente puede invalidar un acceso al instante.
+
+### CP-08 · Acceso del médico por token (CU-04) — `DoctorAccessTests.cs`
+E2E **entre roles**: el paciente genera un token y cierra sesión; el médico inicia sesión, entra a **"Acceso por token"**, ingresa el código y **accede al historial** (*"Acceso autorizado al historial de Juan Carlos Pérez"*). Valida CU-04.
+
+### CP-09 · Buscar medicina + comparador (soporte 5.3) — `MedicinesTests.cs`
+Busca **"Paracetamol"**, abre el resultado y ve el **comparador de farmacias** ordenado por precio, con la más barata marcada **"MÁS BARATO"**.
+
+### CP-10 · Auditoría de accesos (soporte 5.4) — `AuditTests.cs`
+El paciente entra a **"Auditoría de accesos"** y ve la tabla con al menos un registro inmutable.
 
 ---
 
@@ -203,7 +233,7 @@ Cambia `Browser` a `edge` o `firefox` para correr en otro navegador (igual que e
 
 ## 8. Resultado de la ejecución
 
-Ejecutamos la batería contra HAMPIQ en marcha y el resultado fue **5/5 pruebas correctas**:
+Ejecutamos la batería contra HAMPIQ en marcha y el resultado fue **13/13 pruebas correctas** (10 casos · flujos principal y alterno):
 
 | Test | Caso | Resultado |
 |------|------|-----------|
@@ -212,8 +242,18 @@ Ejecutamos la batería contra HAMPIQ en marcha y el resultado fue **5/5 pruebas 
 | `GenerarToken_ConDuracionYUsos_CreaTokenConFormatoValido` | CP-02 principal | ✅ Correcto |
 | `Emergencia_SimularEscaneoQr_MuestraSoloDatosVitales` | CP-03 principal | ✅ Correcto |
 | `Emergencia_CodigoInvalido_MuestraErrorYNoRevelaDatos` | CP-03 alterno | ✅ Correcto |
+| `Registro_ValidarDniRenec_AutocompletaDatos` | CP-04 principal | ✅ Correcto |
+| `Registro_DniConFormatoInvalido_MuestraError` | CP-04 alterno | ✅ Correcto |
+| `Login_Medico_RedirigeAInicioMedico` | CP-05 | ✅ Correcto |
+| `Login_Admin_RedirigeAlPanel` | CP-06 | ✅ Correcto |
+| `RevocarToken_DejaElTokenInvalidado` | CP-07 | ✅ Correcto |
+| `MedicoValidaTokenDelPaciente_AccedeAlHistorial` | CP-08 | ✅ Correcto |
+| `BuscarMedicina_MuestraComparadorDeFarmacias` | CP-09 | ✅ Correcto |
+| `Paciente_ConsultaAuditoria_VeRegistros` | CP-10 | ✅ Correcto |
 
 Las capturas de evidencia se guardan en `Evidencias/` (se generan automáticamente al definir la variable de entorno `HAMPIQ_EVIDENCE_DIR`) y están incrustadas en **`CASOS_DE_PRUEBA_Grupo5.docx`**.
+
+> El documento `CASOS_DE_PRUEBA_Grupo5.docx` incluye además **5 casos de prueba diseñados (CP-11 a CP-15)** documentados como **pendientes de automatización** (registros clínicos del médico, medicina fuera de catálogo, tarjeta de emergencia y cierre de sesión por dispositivo).
 
 ---
 

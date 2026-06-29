@@ -3,7 +3,7 @@
 > **Grupo 5** · UNMSM · Pruebas funcionales end-to-end con **Selenium WebDriver + C# (NUnit)**.
 > Documento que describe **cada prueba** ejecutada: objetivo, precondiciones, datos, pasos, resultado esperado, resultado obtenido y evidencia.
 
-Se automatizaron los **3 casos de uso más importantes** de HAMPIQ, cada uno con su **flujo principal** y su **flujo alterno**, dando un total de **5 pruebas**.
+Se automatizaron **10 casos de prueba** de HAMPIQ (los flujos más importantes, varios con su **flujo principal** y su **flujo alterno**), dando un total de **13 pruebas**.
 
 ## Resumen de ejecución
 
@@ -14,8 +14,18 @@ Se automatizaron los **3 casos de uso más importantes** de HAMPIQ, cada uno con
 | 3 | `GenerarToken_ConDuracionYUsos_CreaTokenConFormatoValido` | CP-02 (CU-03) | Principal | ✅ Correcto |
 | 4 | `Emergencia_SimularEscaneoQr_MuestraSoloDatosVitales` | CP-03 (CU-05) | Principal | ✅ Correcto |
 | 5 | `Emergencia_CodigoInvalido_MuestraErrorYNoRevelaDatos` | CP-03 (CU-05) | Alterno | ✅ Correcto |
+| 6 | `Registro_ValidarDniRenec_AutocompletaDatos` | CP-04 (CU-01) | Principal | ✅ Correcto |
+| 7 | `Registro_DniConFormatoInvalido_MuestraError` | CP-04 (CU-01) | Alterno | ✅ Correcto |
+| 8 | `Login_Medico_RedirigeAInicioMedico` | CP-05 (CU-02) | Principal | ✅ Correcto |
+| 9 | `Login_Admin_RedirigeAlPanel` | CP-06 (CU-02) | Principal | ✅ Correcto |
+| 10 | `RevocarToken_DejaElTokenInvalidado` | CP-07 (CU-03) | Principal | ✅ Correcto |
+| 11 | `MedicoValidaTokenDelPaciente_AccedeAlHistorial` | CP-08 (CU-04) | Principal | ✅ Correcto |
+| 12 | `BuscarMedicina_MuestraComparadorDeFarmacias` | CP-09 (soporte) | Principal | ✅ Correcto |
+| 13 | `Paciente_ConsultaAuditoria_VeRegistros` | CP-10 (soporte) | Principal | ✅ Correcto |
 
-**Total: 5 pruebas · 5 correctas · 0 incorrectas.** Las pruebas se ejecutan contra HAMPIQ en marcha (frontend `http://localhost:5173`, backend `http://127.0.0.1:8000`). Cada elemento se localiza por su atributo `data-testid`.
+**Total: 13 pruebas · 13 correctas · 0 incorrectas.** Las pruebas se ejecutan contra HAMPIQ en marcha (frontend `http://localhost:5173`, backend `http://127.0.0.1:8000`). Cada elemento se localiza por su atributo `data-testid`.
+
+> Además, el documento `CASOS_DE_PRUEBA_Grupo5.docx` incluye **5 casos diseñados (CP-11 a CP-15)** documentados como *pendientes de automatización*.
 
 ---
 
@@ -169,6 +179,134 @@ Se automatizaron los **3 casos de uso más importantes** de HAMPIQ, cada uno con
 **Evidencia:**
 
 ![Código de emergencia inválido — sin revelar datos](Evidencias/CP-03-flujo-alterno-error.png)
+
+---
+
+## CP-04 · Registro con validación RENIEC (CU-01) — `Tests/RegisterTests.cs`
+
+### Prueba 6 · `Registro_ValidarDniRenec_AutocompletaDatos` (flujo principal)
+
+| Campo | Detalle |
+|-------|---------|
+| **Objetivo** | Verificar que al validar un DNI, el sistema consulta RENIEC y autocompleta los datos oficiales. |
+| **Precondiciones** | Backend y frontend en ejecución. |
+| **Datos de entrada** | DNI = `08456712` |
+| **Pasos** | Landing → «Crear cuenta» (`landing-register`) → escribir DNI (`reg-dni`) → «Validar» (`reg-validar`) → leer panel verificado (`reg-verified`, `reg-nombres`). |
+| **Resultado esperado** | Aparece el panel «IDENTIDAD VERIFICADA» con los nombres oficiales del DNI. |
+| **Resultado obtenido** | ✅ **Correcto** — se mostró «Pedro Antonio Huamán Soto». |
+
+> Se prueba la verificación RENIEC (idempotente), no la creación de la cuenta, para que la prueba sea re-ejecutable.
+
+![Identidad verificada por RENIEC](Evidencias/CP-04-flujo-principal-renec.png)
+
+### Prueba 7 · `Registro_DniConFormatoInvalido_MuestraError` (flujo alterno)
+
+| Campo | Detalle |
+|-------|---------|
+| **Objetivo** | Verificar la validación de formato del DNI antes de consultar RENIEC. |
+| **Datos de entrada** | DNI = `123` |
+| **Pasos** | Landing → «Crear cuenta» → escribir DNI inválido → «Validar» → leer error (`reg-error`). |
+| **Resultado esperado** | Mensaje «El DNI debe tener exactamente 8 dígitos.» |
+| **Resultado obtenido** | ✅ **Correcto**. |
+
+![DNI con formato inválido](Evidencias/CP-04-flujo-alterno-error.png)
+
+---
+
+## CP-05 · Login de Médico (CU-02) — `Tests/LoginRolesTests.cs`
+
+### Prueba 8 · `Login_Medico_RedirigeAInicioMedico`
+
+| Campo | Detalle |
+|-------|---------|
+| **Objetivo** | Verificar que un usuario con rol médico es dirigido a su pantalla de inicio. |
+| **Datos de entrada** | DNI = `40221785`, Contraseña = `medico123` |
+| **Pasos** | Landing → «Iniciar sesión» → credenciales del médico → «Ingresar» → esperar `doctor-home`. |
+| **Resultado esperado** | Se carga la pantalla de inicio del médico (Dra. Ana María Flores). |
+| **Resultado obtenido** | ✅ **Correcto**. |
+
+![Login de médico](Evidencias/CP-05-login-medico.png)
+
+---
+
+## CP-06 · Login de Administrador (CU-02) — `Tests/LoginRolesTests.cs`
+
+### Prueba 9 · `Login_Admin_RedirigeAlPanel`
+
+| Campo | Detalle |
+|-------|---------|
+| **Objetivo** | Verificar que un usuario con rol administrador es dirigido al panel general. |
+| **Datos de entrada** | DNI = `10000001`, Contraseña = `admin123` |
+| **Pasos** | Landing → «Iniciar sesión» → credenciales del admin → «Ingresar» → esperar `admin-panel`. |
+| **Resultado esperado** | Se carga el «Panel general» del administrador. |
+| **Resultado obtenido** | ✅ **Correcto**. |
+
+![Login de administrador](Evidencias/CP-06-login-admin.png)
+
+---
+
+## CP-07 · Revocar token (CU-03) — `Tests/ShareTokenTests.cs`
+
+### Prueba 10 · `RevocarToken_DejaElTokenInvalidado`
+
+| Campo | Detalle |
+|-------|---------|
+| **Objetivo** | Verificar que el paciente puede revocar un token y el acceso queda invalidado de inmediato. |
+| **Precondiciones** | Paciente autenticado (`45872136` / `hampiq123`). |
+| **Pasos** | Login → «Compartir acceso» → generar token (`share-generate`) → «Revocar» (`share-revoke`) → leer toast (`toast`). |
+| **Resultado esperado** | Toast «Token revocado. El acceso fue invalidado.» |
+| **Resultado obtenido** | ✅ **Correcto**. |
+
+![Token revocado](Evidencias/CP-07-token-revocado.png)
+
+---
+
+## CP-08 · Acceso del médico por token (CU-04) — `Tests/DoctorAccessTests.cs`
+
+### Prueba 11 · `MedicoValidaTokenDelPaciente_AccedeAlHistorial`
+
+| Campo | Detalle |
+|-------|---------|
+| **Objetivo** | Verificar el flujo entre roles: el paciente genera un token y el médico lo usa para acceder al historial. |
+| **Precondiciones** | Backend y frontend en ejecución. |
+| **Pasos** | (1) Paciente: login → «Compartir acceso» → generar token y copiar el código. (2) Cerrar sesión (`logout`). (3) Médico: login (`40221785/medico123`) → «Acceso por token» (`nav-doctor`) → ingresar el código (`doc-token`) → «Acceder al historial» (`doc-submit`) → esperar `doc-granted`. |
+| **Resultado esperado** | Banner «Acceso autorizado al historial de Juan Carlos Pérez». |
+| **Resultado obtenido** | ✅ **Correcto**. |
+
+![Médico accede al historial por token](Evidencias/CP-08-medico-accede-historial.png)
+
+---
+
+## CP-09 · Buscar medicina + comparador (soporte 5.3) — `Tests/MedicinesTests.cs`
+
+### Prueba 12 · `BuscarMedicina_MuestraComparadorDeFarmacias`
+
+| Campo | Detalle |
+|-------|---------|
+| **Objetivo** | Verificar que al buscar un fármaco del catálogo se muestra el comparador de precios por farmacia. |
+| **Precondiciones** | Paciente autenticado. |
+| **Datos de entrada** | Búsqueda = `Paracetamol` |
+| **Pasos** | Login → «Buscar medicina» (`nav-medicines`) → escribir (`med-search`) → abrir resultado (`med-result-m3`) → verificar comparador (`med-comparator`) y «MÁS BARATO» (`med-cheapest`). |
+| **Resultado esperado** | Se muestra el comparador ordenado por precio con la farmacia más barata marcada. |
+| **Resultado obtenido** | ✅ **Correcto**. |
+
+![Comparador de farmacias](Evidencias/CP-09-comparador-farmacias.png)
+
+---
+
+## CP-10 · Auditoría de accesos (soporte 5.4) — `Tests/AuditTests.cs`
+
+### Prueba 13 · `Paciente_ConsultaAuditoria_VeRegistros`
+
+| Campo | Detalle |
+|-------|---------|
+| **Objetivo** | Verificar que el paciente puede consultar su registro inmutable de accesos. |
+| **Precondiciones** | Paciente autenticado. |
+| **Pasos** | Login → «Auditoría de accesos» (`nav-audit`) → verificar tabla (`audit-list`) y filas (`audit-row`). |
+| **Resultado esperado** | Se muestra la auditoría con al menos un registro. |
+| **Resultado obtenido** | ✅ **Correcto**. |
+
+![Auditoría de accesos](Evidencias/CP-10-auditoria.png)
 
 ---
 

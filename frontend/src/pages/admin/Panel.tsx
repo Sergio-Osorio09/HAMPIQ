@@ -12,7 +12,7 @@ export function AdminPanel() {
   const auditView = computeAuditView(audit)
 
   return (
-    <div style={s('animation:hq-fade .35s ease both;')}>
+    <div data-testid="admin-panel" style={s('animation:hq-fade .35s ease both;')}>
       <h1 style={s('font-size:30px;font-weight:800;letter-spacing:-.025em;margin:0 0 6px;')}>Panel general</h1>
       <p style={s('font-size:14.5px;color:#516160;margin:0 0 26px;')}>Supervisión operativa de la plataforma Hampiq.</p>
       <div style={s('display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px;')}>

@@ -23,4 +23,16 @@ public class PatientDashboardPage : BasePage
         Click(Tid("nav-share"));
         return new SharePage(Driver, WaitSeconds);
     }
+
+    public MedicinesPage IrABuscarMedicina()
+    {
+        Click(Tid("nav-medicines"));
+        return new MedicinesPage(Driver, WaitSeconds);
+    }
+
+    public AuditPage IrAAuditoria()
+    {
+        Click(Tid("nav-audit"));
+        return new AuditPage(Driver, WaitSeconds);
+    }
 }
