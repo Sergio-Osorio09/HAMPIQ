@@ -89,14 +89,14 @@ export function Auth() {
               <p style={s('font-size:14.5px;color:#516160;margin:0 0 26px;')}>Ingresa con tu DNI y contraseña.</p>
 
               <label style={s('display:block;font-size:13px;font-weight:600;margin-bottom:7px;')}>DNI</label>
-              <Box as="input" value={login.dni} onChange={(e) => setLogin('dni', e.target.value)} placeholder="Número de documento" inputMode="numeric"
+              <Box as="input" data-testid="login-dni" value={login.dni} onChange={(e) => setLogin('dni', e.target.value)} placeholder="Número de documento" inputMode="numeric"
                 css="width:100%;border:1.5px solid #d4e0de;border-radius:10px;padding:13px 14px;font-size:15px;font-family:'JetBrains Mono',monospace;margin-bottom:16px;background:#fff;" focus={FOCUS} />
               <label style={s('display:block;font-size:13px;font-weight:600;margin-bottom:7px;')}>Contraseña</label>
-              <Box as="input" value={login.password} onChange={(e) => setLogin('password', e.target.value)} type="password" placeholder="••••••••" css={FIELD + 'margin-bottom:20px;'} focus={FOCUS} />
-              <button onClick={doLogin} style={s('width:100%;border:none;background:#0d7d74;color:#fff;font-size:15.5px;font-weight:700;padding:14px;border-radius:11px;cursor:pointer;box-shadow:0 12px 24px -10px #0d7d74cc;')}>Ingresar</button>
+              <Box as="input" data-testid="login-password" value={login.password} onChange={(e) => setLogin('password', e.target.value)} type="password" placeholder="••••••••" css={FIELD + 'margin-bottom:20px;'} focus={FOCUS} />
+              <button data-testid="login-submit" onClick={doLogin} style={s('width:100%;border:none;background:#0d7d74;color:#fff;font-size:15.5px;font-weight:700;padding:14px;border-radius:11px;cursor:pointer;box-shadow:0 12px 24px -10px #0d7d74cc;')}>Ingresar</button>
 
               {login.error && (
-                <div style={s('background:#fdeaec;border:1px solid #f5c9ce;color:#c0202f;font-size:13px;font-weight:500;padding:11px 14px;border-radius:10px;margin-top:14px;display:flex;align-items:center;gap:8px;')}><span style={s('font-weight:700;')}>!</span><span>{login.error}</span></div>
+                <div style={s('background:#fdeaec;border:1px solid #f5c9ce;color:#c0202f;font-size:13px;font-weight:500;padding:11px 14px;border-radius:10px;margin-top:14px;display:flex;align-items:center;gap:8px;')}><span style={s('font-weight:700;')}>!</span><span data-testid="login-error">{login.error}</span></div>
               )}
 
               <div style={s('background:#f7faf9;border:1px solid #e6eeed;border-radius:12px;padding:14px 16px;margin-top:20px;font-size:12.5px;color:#516160;line-height:1.7;')}>

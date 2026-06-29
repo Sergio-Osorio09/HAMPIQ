@@ -12,7 +12,7 @@ export function Dashboard() {
   const enfermedadesStr = vitals.enfermedades.join(', ')
 
   return (
-    <div style={s('animation:hq-fade .35s ease both;')}>
+    <div data-testid="patient-dashboard" style={s('animation:hq-fade .35s ease both;')}>
       <div style={s('display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;')}>
         <div>
           <div style={s('font-size:13.5px;color:#516160;font-weight:500;margin-bottom:4px;')}>Buen día,</div>

@@ -54,12 +54,12 @@ export function Sidebar() {
         {items.map((item) => {
           const active = pscreen === item.key
           return active ? (
-            <button key={item.key} onClick={() => pgo(item.key)} style={s('display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;font-size:14px;font-weight:600;padding:11px 12px;border-radius:10px;color:#fff;background:#1c3a35;')}>
+            <button data-testid={`nav-${item.key}`} key={item.key} onClick={() => pgo(item.key)} style={s('display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;font-size:14px;font-weight:600;padding:11px 12px;border-radius:10px;color:#fff;background:#1c3a35;')}>
               <span style={s('display:flex;width:20px;justify-content:center;')}><Icon name={item.icon} /></span>
               <span>{item.label}</span>
             </button>
           ) : (
-            <Box as="button" key={item.key} onClick={() => pgo(item.key)}
+            <Box as="button" data-testid={`nav-${item.key}`} key={item.key} onClick={() => pgo(item.key)}
               css="display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;font-size:14px;font-weight:600;padding:11px 12px;border-radius:10px;color:#9fc4bf;background:transparent;"
               hover="background:#16302c;">
               <span style={s('display:flex;width:20px;justify-content:center;')}><Icon name={item.icon} /></span>
@@ -72,9 +72,9 @@ export function Sidebar() {
       <div style={s('border-top:1px solid #1d3935;padding-top:14px;margin-top:14px;')}>
         <div style={s('display:flex;align-items:center;gap:10px;padding:6px 8px;')}>
           <div style={s(`width:36px;height:36px;border-radius:50%;background:${avatarBg};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13.5px;flex:none;`)}>{initials}</div>
-          <div style={s('line-height:1.2;min-width:0;')}><div style={s('font-size:13.5px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;')}>{userName}</div><div style={s('font-size:11px;color:#7fb8b2;')}>{roleLabel}</div></div>
+          <div style={s('line-height:1.2;min-width:0;')}><div data-testid="sidebar-username" style={s('font-size:13.5px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;')}>{userName}</div><div style={s('font-size:11px;color:#7fb8b2;')}>{roleLabel}</div></div>
         </div>
-        <button onClick={logout} style={s('margin-top:8px;width:100%;border:1px solid #2c463f;background:transparent;color:#9fc4bf;font-size:13px;font-weight:600;padding:9px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;')}><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>Cerrar sesión</button>
+        <button data-testid="logout" onClick={logout} style={s('margin-top:8px;width:100%;border:1px solid #2c463f;background:transparent;color:#9fc4bf;font-size:13px;font-weight:600;padding:9px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;')}><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>Cerrar sesión</button>
       </div>
     </aside>
   )

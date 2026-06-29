@@ -1,0 +1,6 @@
+# Compilados de .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+TestResults/

@@ -24,16 +24,16 @@ export function Share() {
           <label style={s('display:block;font-size:13.5px;font-weight:600;margin-bottom:10px;')}>Duración del acceso</label>
           <div style={s('display:flex;gap:8px;margin-bottom:20px;')}>
             {DURATIONS.map((d) => (
-              <button key={d.v} onClick={() => setShare('duration', d.v)} style={s(optStyle(share.duration === d.v))}>{d.l}</button>
+              <button data-testid={`share-duration-${d.v}`} key={d.v} onClick={() => setShare('duration', d.v)} style={s(optStyle(share.duration === d.v))}>{d.l}</button>
             ))}
           </div>
           <label style={s('display:block;font-size:13.5px;font-weight:600;margin-bottom:10px;')}>Número de usos permitidos</label>
           <div style={s('display:flex;gap:8px;margin-bottom:24px;')}>
             {USES.map((u) => (
-              <button key={u.v} onClick={() => setShare('uses', u.v)} style={s(optStyle(share.uses === u.v))}>{u.l}</button>
+              <button data-testid={`share-uses-${u.v}`} key={u.v} onClick={() => setShare('uses', u.v)} style={s(optStyle(share.uses === u.v))}>{u.l}</button>
             ))}
           </div>
-          <button onClick={generarToken} style={s('width:100%;border:none;background:#0d7d74;color:#fff;font-size:15px;font-weight:700;padding:14px;border-radius:11px;cursor:pointer;box-shadow:0 12px 24px -10px #0d7d74cc;')}>Generar token</button>
+          <button data-testid="share-generate" onClick={generarToken} style={s('width:100%;border:none;background:#0d7d74;color:#fff;font-size:15px;font-weight:700;padding:14px;border-radius:11px;cursor:pointer;box-shadow:0 12px 24px -10px #0d7d74cc;')}>Generar token</button>
         </div>
 
         {shareGenerated ? (
@@ -42,7 +42,7 @@ export function Share() {
             <div style={s('position:relative;')}>
               <div style={s('font-size:12px;font-weight:700;color:#7fb8b2;letter-spacing:.06em;margin-bottom:14px;')}>TOKEN GENERADO</div>
               <div style={s('background:#16302c;border-radius:12px;padding:16px;text-align:center;margin-bottom:16px;')}>
-                <div style={s("font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;letter-spacing:.06em;color:#5fd6cb;")}>{shareGenerated.code}</div>
+                <div data-testid="share-token-code" style={s("font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;letter-spacing:.06em;color:#5fd6cb;")}>{shareGenerated.code}</div>
               </div>
               <div style={s('display:flex;gap:20px;margin-bottom:18px;')}>
                 <div><div style={s('font-size:11px;color:#7fb8b2;')}>Vigencia</div><div style={s("font-size:18px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#5fd6cb;")}>{shareGenerated.remText}</div></div>

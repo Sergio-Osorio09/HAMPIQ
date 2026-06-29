@@ -18,7 +18,7 @@ export function Landing() {
           </div>
         </div>
         <div style={s('display:flex;align-items:center;gap:10px;')}>
-          <button onClick={goLogin} style={s('border:none;background:transparent;font-size:14.5px;font-weight:600;color:#0f211f;padding:11px 18px;border-radius:10px;cursor:pointer;')}>Iniciar sesión</button>
+          <button data-testid="landing-login" onClick={goLogin} style={s('border:none;background:transparent;font-size:14.5px;font-weight:600;color:#0f211f;padding:11px 18px;border-radius:10px;cursor:pointer;')}>Iniciar sesión</button>
           <button onClick={goRegister} style={s('border:none;background:#0d7d74;color:#fff;font-size:14.5px;font-weight:600;padding:11px 20px;border-radius:10px;cursor:pointer;box-shadow:0 8px 18px -8px #0d7d74cc;')}>Crear cuenta</button>
         </div>
       </header>
@@ -73,7 +73,7 @@ export function Landing() {
           <div style={s('display:flex;gap:10px;flex-wrap:wrap;')}>
             <button onClick={quickPaciente} style={s('border:1px solid #2c463f;background:#16302c;color:#dff0ed;font-size:13.5px;font-weight:600;padding:10px 16px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;')}>👤 Paciente</button>
             <button onClick={quickMedico} style={s('border:1px solid #2c463f;background:#16302c;color:#dff0ed;font-size:13.5px;font-weight:600;padding:10px 16px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;')}>🩺 Médico</button>
-            <button onClick={goEmergency} style={s('border:1px solid #5a2b30;background:#3a1a1e;color:#ffd9dd;font-size:13.5px;font-weight:600;padding:10px 16px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;')}>🚑 Emergencia</button>
+            <button data-testid="landing-emergency" onClick={goEmergency} style={s('border:1px solid #5a2b30;background:#3a1a1e;color:#ffd9dd;font-size:13.5px;font-weight:600;padding:10px 16px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;')}>🚑 Emergencia</button>
             <button onClick={quickAdmin} style={s('border:1px solid #2c463f;background:#16302c;color:#dff0ed;font-size:13.5px;font-weight:600;padding:10px 16px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;')}>⚙️ Administrador</button>
           </div>
         </div>
